@@ -50,6 +50,11 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 20px rgba(220, 20, 60, 0.3), 0 0 60px rgba(220, 20, 60, 0.1);
 }
 
+.mask-radial-fade {
+  mask-image: radial-gradient(circle at center, black 0%, transparent 80%);
+  -webkit-mask-image: radial-gradient(circle at center, black 0%, transparent 80%);
+}
+
 @keyframes noise {
   0% { transform: translate(0,0) }
   10% { transform: translate(-5%,-5%) }
