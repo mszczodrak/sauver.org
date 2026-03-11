@@ -169,32 +169,82 @@ const App = () => {
       </section>
 
       {/* Section 3: The Shield */}
-      <section className="py-32 px-6 relative bg-[#0a0a0a]">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row-reverse items-center gap-16">
-          <div className="md:w-1/2">
-            <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 leading-tight text-cyan-400">
-              AUTOMATED VANGUARD.<br />
-              PERSONALIZED DEFENSE.
-            </h2>
-            <p className="text-xl text-gray-400 leading-relaxed mb-12">
-              Sauver is an agent that works only for you. Built on the Model Context Protocol (MCP), it acts as a digital barrier. It automatically analyzes incoming noise, enforces your organizational rules, and filters the chaos before it even hits your screen.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {[
-                { title: "Intelligent Labeling", icon: Zap },
-                { title: "Privacy-First Auditing", icon: Shield },
-                { title: "Automated Triage", icon: Target }
-              ].map((f, i) => (
-                <div key={i} className="p-6 bg-[#1a1a1a] border border-white/5 hover:border-cyan-500/30 transition-all rounded-xl">
-                  <f.icon className="w-6 h-6 text-cyan-400 mb-4" />
-                  <h4 className="font-bold text-lg">{f.title}</h4>
-                </div>
-              ))}
-            </div>
+      <section className="py-32 px-6 relative bg-[#0a0a0a] overflow-hidden">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row-reverse items-center gap-20">
+          <div className="md:w-1/2 relative z-10">
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-4xl md:text-7xl font-black tracking-tighter mb-8 leading-[0.9] text-cyan-400">
+                AUTOMATED VANGUARD.<br />
+                PERSONALIZED DEFENSE.
+              </h2>
+              <p className="text-xl md:text-2xl text-gray-400 leading-relaxed mb-12 font-light">
+                Sauver is an agent that works only for you. Built on the <span className="text-white">Model Context Protocol (MCP)</span>, it acts as a digital barrier. It automatically analyzes incoming noise, enforces your organizational rules (the <span className="text-amber-400">‘Vitals’</span>), and filters the chaos before it even hits your screen.
+              </p>
+              
+              <div className="space-y-6">
+                {[
+                  { title: "Intelligent Labeling", icon: Zap, desc: "Automatic categorization based on intent." },
+                  { title: "Privacy-First Auditing", icon: Shield, desc: "Neutralize tracking pixels locally." },
+                  { title: "Automated Task Triaging", icon: Target, desc: "Shift cognitive load back to the sender." }
+                ].map((f, i) => (
+                  <div key={i} className="flex gap-6 p-6 bg-[#111] border border-white/5 hover:border-cyan-500/30 transition-all rounded-2xl group">
+                    <div className="w-12 h-12 shrink-0 rounded-full bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20 group-hover:bg-cyan-500 group-hover:text-black transition-all">
+                      <f.icon className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-lg mb-1">{f.title}</h4>
+                      <p className="text-gray-500 text-sm">{f.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
           </div>
-          <div className="md:w-1/2 aspect-video bg-[#050505] border border-cyan-500/20 rounded-2xl relative overflow-hidden flex items-center justify-center">
-            <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/10 to-transparent" />
-            <Shield className="w-32 h-32 text-cyan-400/20" />
+          
+          <div className="md:w-1/2 relative">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              className="relative aspect-[4/5] md:aspect-square rounded-2xl overflow-hidden border border-cyan-500/20 shadow-2xl shadow-cyan-500/10"
+            >
+              <img 
+                src="/Section3_v7.avif" 
+                alt="Automated Shield Vanguard" 
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-tr from-[#0a0a0a] via-transparent to-transparent" />
+              
+              {/* Technical Detail Overlay */}
+              <div className="absolute bottom-8 left-8 right-8 p-6 backdrop-blur-xl bg-black/60 border border-white/10 rounded-2xl">
+                <div className="flex justify-between items-end">
+                  <div>
+                    <div className="text-[10px] font-black uppercase tracking-[0.3em] text-cyan-400 mb-2">Protocol Status</div>
+                    <div className="text-2xl font-mono text-white tracking-tighter">SECURE.LOCAL</div>
+                  </div>
+                  <div className="flex gap-1">
+                    {[...Array(4)].map((_, i) => (
+                      <div key={i} className="w-1 h-8 bg-cyan-400/20 rounded-full overflow-hidden">
+                        <motion.div 
+                          animate={{ height: ["20%", "100%", "20%"] }}
+                          transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
+                          className="w-full bg-cyan-400"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+            
+            {/* Background Glow */}
+            <div className="absolute -left-20 -bottom-20 w-80 h-80 bg-cyan-500/10 blur-[120px] rounded-full pointer-events-none" />
           </div>
         </div>
       </section>
