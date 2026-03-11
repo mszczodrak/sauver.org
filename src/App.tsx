@@ -105,26 +105,65 @@ const App = () => {
       </section>
 
       {/* Section 2: The Enemy */}
-      <section className="py-32 px-6 relative bg-black">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
-          <div className="md:w-1/2">
-            <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 leading-tight">
-              THE NOISE THEY CREATED.<br />
-              THE SILENCE YOU DESERVE.
-            </h2>
-            <p className="text-xl text-gray-400 leading-relaxed mb-8">
-              They’ve weaponized your attention. Every email is an attempt to take from you—time, energy, privacy. The mental cost of maintaining order is too high. You are not overwhelmed; you are outnumbered.
-            </p>
+      <section className="py-32 px-6 relative bg-black overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,_rgba(220,20,60,0.05)_0%,_transparent_50%)] pointer-events-none" />
+        
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-20">
+          <div className="md:w-1/2 relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-4xl md:text-7xl font-black tracking-tighter mb-8 leading-[0.9]">
+                THE <span className="text-gray-600">NOISE</span> THEY CREATED.<br />
+                THE <span className="text-white">SILENCE</span> YOU DESERVE.
+              </h2>
+              <p className="text-xl md:text-2xl text-gray-400 leading-relaxed mb-8 font-light">
+                They’ve weaponized your attention. Every email is an attempt to take from you—time, energy, privacy. 
+              </p>
+              <div className="h-px w-24 bg-crimson-500 mb-8" />
+              <p className="text-lg text-gray-500 leading-relaxed italic">
+                "The mental cost of maintaining order is too high. You are not overwhelmed; you are outnumbered."
+              </p>
+            </motion.div>
           </div>
-          <div className="md:w-1/2 relative aspect-square bg-[#111] rounded-2xl overflow-hidden border border-white/5 flex items-center justify-center p-12">
-             <div className="absolute inset-0 opacity-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-             <div className="relative z-10 grid grid-cols-4 gap-4 animate-pulse">
-                {[...Array(16)].map((_, i) => (
-                  <div key={i} className="aspect-square bg-gray-800/50 rounded-lg flex items-center justify-center border border-white/5">
-                    <Target className="w-6 h-6 text-gray-600" />
-                  </div>
-                ))}
-             </div>
+          
+          <div className="md:w-1/2 relative">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, rotate: 2 }}
+              whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              className="relative aspect-square rounded-2xl overflow-hidden border border-white/5 shadow-2xl shadow-crimson-500/10"
+            >
+              <img 
+                src="/Section2_v5.avif" 
+                alt="Digital Noise Chaos" 
+                className="w-full h-full object-cover grayscale opacity-80 hover:grayscale-0 transition-all duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+              
+              {/* Overlay elements to enhance the 'chaos' feel */}
+              <div className="absolute top-4 left-4 p-4 backdrop-blur-md bg-black/40 border border-white/10 rounded-lg max-w-[200px]">
+                <div className="flex items-center gap-2 mb-2">
+                  <Target className="w-4 h-4 text-crimson-500" />
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-crimson-500">Tracking Pixel Detected</span>
+                </div>
+                <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                  <motion.div 
+                    initial={{ width: "0%" }}
+                    whileInView={{ width: "100%" }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className="h-full bg-crimson-500"
+                  />
+                </div>
+              </div>
+            </motion.div>
+            
+            {/* Background decorative element */}
+            <div className="absolute -right-20 -top-20 w-64 h-64 bg-crimson-500/10 blur-[100px] rounded-full pointer-events-none" />
           </div>
         </div>
       </section>
