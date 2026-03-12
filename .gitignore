@@ -24,6 +24,11 @@ dist-ssr/
 *.sln
 *.sw?
 
+# Next.js
+.next/
+out/
+build/
+
 # Vite
 # vite v3+ uses 'dist' for build output by default
 # if you use a different build directory, update it here
