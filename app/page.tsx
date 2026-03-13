@@ -1,306 +1,381 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 
-// Stats targets (repurposed for Sauver)
-const statTargets = {
-  trackers: 10000,
-  accuracy: 99.9,
-  timeSaved: 50,
-  slop: 95
-};
+const TERMINAL_SEQUENCE = [
+  { delay: 600, type: 'cmd', text: '$ sauver scan --inbox' },
+  { delay: 400, type: 'info', text: '▸ Connecting to Gmail API... ✓' },
+  { delay: 500, type: 'info', text: '▸ Scanning 47 unread messages...' },
+  { delay: 800, type: 'sep', text: ' ' },
+  { delay: 100, type: 'blocked', text: '⊘ TRACKER BLOCKED' },
+  { delay: 100, type: 'detail', text: '  ↳ from: talent@recruitpro.io' },
+  { delay: 100, type: 'detail', text: '  ↳ pixel: track.sendgrid.net stripped' },
+  { delay: 700, type: 'slop', text: '⚡ SLOP DETECTED  [98.3% confidence]' },
+  { delay: 100, type: 'detail', text: '  ↳ "Hi {first_name}, I came across..."' },
+  { delay: 100, type: 'detail', text: '  ↳ template hash: 0xA3F8 (mass-sent)' },
+  { delay: 400, type: 'trap', text: '⟹  EXPERT TRAP DEPLOYED' },
+  { delay: 100, type: 'detail', text: '  ↳ "Explain TCP seq. numbering"' },
+  { delay: 100, type: 'detail', text: '  ↳ status: awaiting reply...' },
+  { delay: 900, type: 'sep', text: ' ' },
+  { delay: 200, type: 'success', text: '✓ Purified. 12 tracked. 8 traps queued.' },
+  { delay: 3500, type: 'reset', text: '' },
+];
+
+function TerminalDemo() {
+  const [lines, setLines] = useState<Array<{ type: string; text: string }>>([]);
+  const [cursor, setCursor] = useState(true);
+  const bodyRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => setCursor(c => !c), 530);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (bodyRef.current) {
+      bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
+    }
+  }, [lines]);
+
+  useEffect(() => {
+    let idx = 0;
+    let tid: ReturnType<typeof setTimeout>;
+
+    const next = () => {
+      if (idx >= TERMINAL_SEQUENCE.length) return;
+      const item = TERMINAL_SEQUENCE[idx++];
+      if (item.type === 'reset') {
+        tid = setTimeout(() => { setLines([]); idx = 0; next(); }, item.delay);
+        return;
+      }
+      setLines(prev => [...prev, { type: item.type, text: item.text }]);
+      tid = setTimeout(next, item.delay);
+    };
+
+    tid = setTimeout(next, 800);
+    return () => clearTimeout(tid);
+  }, []);
+
+  return (
+    <div className="terminal">
+      <div className="terminal-header">
+        <div className="terminal-dots"><span /><span /><span /></div>
+        <span className="terminal-title">sauver — bash</span>
+        <span className="terminal-live">● LIVE</span>
+      </div>
+      <div className="terminal-body" ref={bodyRef}>
+        {lines.map((line, i) => (
+          <div key={i} className={`t-line t-${line.type}`}>{line.text}</div>
+        ))}
+        <span className={`t-cursor ${cursor ? 'on' : 'off'}`}>█</span>
+      </div>
+    </div>
+  );
+}
+
+const statTargets = { trackers: 10000, accuracy: 99.9, timeSaved: 50, slop: 95 };
+
+const statItems: Array<{ key: keyof typeof statTargets; label: string }> = [
+  { key: 'trackers', label: 'Trackers Blocked' },
+  { key: 'accuracy', label: 'Detection Accuracy' },
+  { key: 'timeSaved', label: 'Time Reclaimed' },
+  { key: 'slop', label: 'Slop Reduction' },
+];
+
+const steps = [
+  { num: '01', title: 'Tracker Shielding', desc: 'Identifies and neutralizes 1×1 tracking pixels and surveillance beacons before they phone home.' },
+  { num: '02', title: 'Slop Detection', desc: 'AI classification distinguishes genuine human outreach from machine-generated "job slop" and sales templates.' },
+  { num: '03', title: 'Expert-Domain Traps', desc: 'Fires hyper-specific, technically demanding questions at recruiters to shift the cognitive load back to the sender.' },
+  { num: '04', title: 'Bouncer Replies', desc: 'Engages generic spammers with absurd, bureaucratic, or confusing automated replies to waste their resources.' },
+  { num: '05', title: 'Inbox Triage', desc: 'Categorizes, labels, and archives emails by content and risk level, keeping your focus on what matters.' },
+];
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("");
-
-  // Stats Counters State
+  const [activeSection, setActiveSection] = useState('');
   const [statsStarted, setStatsStarted] = useState(false);
   const [stats, setStats] = useState({ trackers: 0, accuracy: 0, timeSaved: 0, slop: 0 });
+  const [scrolled, setScrolled] = useState(false);
 
-  // Refs
   const revealRefs = useRef<(HTMLElement | null)[]>([]);
   const statsRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    // Scrollspy
-    const handleScroll = () => {
-      let current = "";
-      const sections = document.querySelectorAll('section');
-      sections.forEach(section => {
-        const sectionTop = (section as HTMLElement).offsetTop;
-        if (window.scrollY >= sectionTop - 100) {
-          const id = section.getAttribute('id');
-          if (id) current = id;
-        }
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20);
+      let current = '';
+      document.querySelectorAll<HTMLElement>('section[id]').forEach(s => {
+        if (window.scrollY >= s.offsetTop - 120) current = s.id;
       });
       setActiveSection(current);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   useEffect(() => {
-    // Intersection Observer for reveals
-    const observerOptions = { threshold: 0.1 };
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
+    const observer = new IntersectionObserver(
+      entries => entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('active');
-          if (entry.target.classList.contains('stats-band')) setStatsStarted(true);
+          if (entry.target === statsRef.current) setStatsStarted(true);
         }
-      });
-    }, observerOptions);
-
-    revealRefs.current.forEach(el => {
-      if (el) observer.observe(el);
-    });
+      }),
+      { threshold: 0.1 }
+    );
+    revealRefs.current.forEach(el => el && observer.observe(el));
     if (statsRef.current) observer.observe(statsRef.current);
-
     return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
-    // Stats Animation
     if (!statsStarted) return;
-    const duration = 2000;
-    const startTime = performance.now();
-
-    const animateStats = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-
+    const start = performance.now();
+    const animate = (now: number) => {
+      const p = Math.min((now - start) / 2000, 1);
       setStats({
-        trackers: progress * statTargets.trackers,
-        accuracy: progress * statTargets.accuracy,
-        timeSaved: progress * statTargets.timeSaved,
-        slop: progress * statTargets.slop
+        trackers: p * statTargets.trackers,
+        accuracy: p * statTargets.accuracy,
+        timeSaved: p * statTargets.timeSaved,
+        slop: p * statTargets.slop,
       });
-
-      if (progress < 1) {
-        requestAnimationFrame(animateStats);
-      } else {
-        setStats(statTargets);
-      }
+      if (p < 1) requestAnimationFrame(animate);
+      else setStats(statTargets);
     };
-    requestAnimationFrame(animateStats);
+    requestAnimationFrame(animate);
   }, [statsStarted]);
 
-  const formatStat = (key: string, val: number) => {
-    if (key === 'trackers') return val >= 10000 ? '10K+' : Math.floor(val);
+  const addToRefs = useCallback((el: HTMLElement | null) => {
+    if (el && !revealRefs.current.includes(el)) revealRefs.current.push(el);
+  }, []);
+
+  const formatStat = (key: keyof typeof statTargets, val: number) => {
+    if (key === 'trackers') return val >= 10000 ? '10K+' : Math.floor(val).toString();
     if (key === 'accuracy') return val >= 99.9 ? '99.9%' : val.toFixed(1) + '%';
     if (key === 'timeSaved') return val >= 50 ? '50h+' : Math.floor(val) + 'h';
     if (key === 'slop') return val >= 95 ? '95%' : val.toFixed(1) + '%';
-    return val;
-  };
-
-  const addToRefs = (el: HTMLElement | null) => {
-    if (el && !revealRefs.current.includes(el)) {
-      revealRefs.current.push(el);
-    }
+    return val.toString();
   };
 
   return (
     <>
-      <nav>
+      <nav className={scrolled ? 'scrolled' : ''}>
         <div className="nav-container">
           <Link href="#" className="logo">
             <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.47 4.34-2.98 8.19-7 9.49V12H5V6.3l7-3.11v8.8z" /></svg>
             SAUVER
           </Link>
-          <div className="nav-links" style={{
-            display: mobileMenuOpen ? 'flex' : undefined,
-            flexDirection: mobileMenuOpen ? 'column' : undefined,
-            position: mobileMenuOpen ? 'absolute' : undefined,
-            top: mobileMenuOpen ? '80px' : undefined,
-            left: mobileMenuOpen ? '0' : undefined,
-            width: mobileMenuOpen ? '100%' : undefined,
-            background: mobileMenuOpen ? 'var(--bg-deep)' : undefined,
-            padding: mobileMenuOpen ? '40px' : undefined,
-            borderBottom: mobileMenuOpen ? '1px solid var(--border-amber)' : undefined
-          }}>
-            <Link href="#who-it-is-for" className={activeSection === 'who-it-is-for' ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>Who it is for</Link>
+          <div className={`nav-links ${mobileMenuOpen ? 'open' : ''}`}>
+            <Link href="#who-it-is-for" className={activeSection === 'who-it-is-for' ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>Who it&apos;s for</Link>
             <Link href="#how-it-works" className={activeSection === 'how-it-works' ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>How it works</Link>
             <Link href="#installation" className={activeSection === 'installation' ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>Installation</Link>
-
-            <button className="btn btn-cta pulse">Install Now</button>
+            <Link href="#installation" className="btn btn-cta pulse" onClick={() => setMobileMenuOpen(false)}>Install Now</Link>
           </div>
-          <button className="hamburger" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            <span></span>
-            <span></span>
-            <span></span>
+          <button className={`hamburger ${mobileMenuOpen ? 'open' : ''}`} aria-label="Toggle menu" onClick={() => setMobileMenuOpen(o => !o)}>
+            <span /><span /><span />
           </button>
         </div>
       </nav>
 
       <main>
-        {/* Hero Section */}
+
+        {/* ── Hero ───────────────────────────────────────── */}
         <section className="hero">
-          <div className="hero-bg-visual">
-            <svg width="100%" height="100%" viewBox="0 0 800 800">
-              <circle cx="400" cy="400" r="300" stroke="rgba(245, 166, 35, 0.1)" strokeWidth="0.5" fill="none" />
-              <circle cx="400" cy="400" r="200" stroke="rgba(245, 166, 35, 0.05)" strokeWidth="0.5" fill="none" />
-              <path d="M100 400 Q400 100 700 400" stroke="rgba(245, 166, 35, 0.1)" fill="none" />
-            </svg>
+          <div className="hero-content">
+            <div className="hero-eyebrow mono reveal" style={{ transitionDelay: '0.1s' }} ref={addToRefs}>
+              <div className="dot-blink" />
+              [ AUTONOMOUS INBOX DEFENSE ACTIVE ]
+            </div>
+            <h1 className="reveal" style={{ transitionDelay: '0.25s' }} ref={addToRefs}>
+              RECLAIM YOUR<br />
+              <span>ATTENTION.</span>
+            </h1>
+            <p className="reveal" style={{ transitionDelay: '0.4s' }} ref={addToRefs}>
+              Sauver doesn&apos;t just filter spam — it <strong>strikes back</strong>. A Gemini CLI
+              Extension that strips tracking pixels, exposes AI-generated slop, and deploys
+              expert-level traps to waste spammers&apos; time.
+            </p>
+            <div className="hero-btns reveal" style={{ transitionDelay: '0.55s' }} ref={addToRefs}>
+              <Link href="#installation" className="btn btn-cta">Get Started &rarr;</Link>
+              <Link href="#how-it-works" className="btn btn-outline">See how it works</Link>
+            </div>
+            <p className="hero-trust mono reveal" style={{ transitionDelay: '0.7s' }} ref={addToRefs}>
+              Local-first · Private · MIT Licensed
+            </p>
           </div>
-          <div className="hero-eyebrow mono reveal" style={{ transitionDelay: '0.1s' }} ref={addToRefs}>
-            <div className="dot-blink"></div>
-            [ AUTONOMOUS INBOX DEFENSE ACTIVE ]
-          </div>
-          <h1 className="reveal" style={{ transitionDelay: '0.25s' }} ref={addToRefs}>
-            RECLAIM YOUR<br />
-            <span>ATTENTION.</span>
-          </h1>
-          <p className="reveal" style={{ transitionDelay: '0.4s' }} ref={addToRefs}>
-            Sauver is a Gemini CLI Extension that integrates directly with your digital workspace (specifically Gmail) to perform automated triage and defense.
-          </p>
-          <div className="hero-btns reveal" style={{ transitionDelay: '0.55s' }} ref={addToRefs}>
-            <Link href="#installation" className="btn btn-cta">Get Started &rarr;</Link>
-            <Link href="#how-it-works" className="btn btn-outline">How it works</Link>
+          <div className="hero-visual reveal" style={{ transitionDelay: '0.45s' }} ref={addToRefs}>
+            <TerminalDemo />
           </div>
         </section>
 
-        {/* Who it is for */}
+        {/* ── The Problem (Section2_v3) ───────────────────── */}
+        <section className="problem-strip">
+          <div className="problem-content">
+            <p className="section-label mono reveal" ref={addToRefs}>THE REALITY</p>
+            <h2 className="reveal" ref={addToRefs}>
+              YOUR INBOX IS A<br /><span>WARZONE.</span>
+            </h2>
+            <p className="reveal" ref={addToRefs}>
+              Every day, automated systems harvest your attention, track your opens, and blast identical
+              pitches at thousands of targets — including you. It&apos;s not email. It&apos;s surveillance infrastructure.
+            </p>
+          </div>
+        </section>
+
+        {/* ── Who it is for ──────────────────────────────── */}
         <section id="who-it-is-for" className="section-container">
           <div className="section-header reveal" ref={addToRefs}>
-            <h2>WHO IT IS <span>FOR</span></h2>
+            <div className="section-label mono">WHO IT&apos;S FOR</div>
+            <h2>BUILT FOR THE <span>RESISTANCE</span></h2>
           </div>
           <div className="grid-features">
             <div className="feature-card reveal" ref={addToRefs}>
               <div className="feature-icon">
                 <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
               </div>
-              <h3>Privacy-conscious users</h3>
-              <p>People who want to stop hidden tracking pixels from reporting their activity back to senders.</p>
-            </div>
-            <div className="feature-card reveal" ref={addToRefs}>
-              <div className="feature-icon">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
-              </div>
-              <h3>Deep workers</h3>
-              <p>Professionals who need to reclaim their attention from a bombardment of low-quality, automated outreach.</p>
+              <h3>Privacy-Conscious Users</h3>
+              <p>Stop hidden tracking pixels from reporting your activity back to senders.</p>
             </div>
             <div className="feature-card reveal" ref={addToRefs}>
               <div className="feature-icon">
                 <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg>
               </div>
-              <h3>The "Resistance"</h3>
-              <p>Those who want to actively mirror the tactics of automated predators by wasting the time of those who waste theirs.</p>
+              <h3>The Resistance</h3>
+              <p>Actively mirror the tactics of automated predators. Waste the time of those who waste yours.</p>
+            </div>
+            <div className="feature-card reveal" ref={addToRefs}>
+              <div className="feature-icon">
+                <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
+                  <circle cx="12" cy="12" r="10" />
+                  <circle cx="12" cy="12" r="3" />
+                  <line x1="12" y1="2" x2="12" y2="5" />
+                  <line x1="12" y1="19" x2="12" y2="22" />
+                  <line x1="2" y1="12" x2="5" y2="12" />
+                  <line x1="19" y1="12" x2="22" y2="12" />
+                </svg>
+              </div>
+              <h3>Deep Workers</h3>
+              <p>Reclaim your attention from the bombardment of low-quality, automated outreach.</p>
             </div>
           </div>
         </section>
 
-        {/* How it works */}
-        <section id="how-it-works" className="section-container" style={{ background: 'var(--surface-primary)' }}>
-          <div className="section-header reveal" ref={addToRefs}>
-            <h2>HOW IT <span>WORKS</span></h2>
-          </div>
-          <div className="grid-features">
-            <div className="feature-card reveal" ref={addToRefs}>
-              <h3>1. Tracker Shielding</h3>
-              <p>It analyzes incoming emails to identify and neutralize tracking pixels and automated intent.</p>
+        {/* ── How it works ───────────────────────────────── */}
+        <section id="how-it-works" className="how-it-works-section">
+          <div className="how-it-works-inner">
+            <div>
+              <div className="section-header section-header-left reveal" ref={addToRefs}>
+                <div className="section-label mono">HOW IT WORKS</div>
+                <h2>FIVE LAYERS OF <span>DEFENSE</span></h2>
+              </div>
+              <div className="steps-timeline">
+                {steps.map((step, i) => (
+                  <div key={i} className="step-item reveal" style={{ transitionDelay: `${i * 0.1}s` }} ref={addToRefs}>
+                    <div className="step-num-badge">{step.num}</div>
+                    <div className="step-content">
+                      <h3>{step.title}</h3>
+                      <p>{step.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="feature-card reveal" ref={addToRefs}>
-              <h3>2. Slop Detection</h3>
-              <p>It uses AI to distinguish between genuine human communication and "slop"—machine-generated pitches and mass-marketing noise.</p>
-            </div>
-            <div className="feature-card reveal" ref={addToRefs}>
-              <h3>3. Active Defense (Bouncer Replies)</h3>
-              <p>Instead of just deleting spam, it can stage automated "bouncer" replies to engage with and waste the resources of automated senders.</p>
-            </div>
-            <div className="feature-card reveal" ref={addToRefs}>
-              <h3>4. Inbox Triage</h3>
-              <p>It automatically categorizes, labels, and archives emails based on their content and risk level, keeping your inbox focused on what matters.</p>
-            </div>
-            <div className="feature-card reveal" ref={addToRefs}>
-              <h3>5. Autonomous Operation</h3>
-              <p>Guided by its GEMINI.md mandates, it can perform bulk operations like searching, labeling, and drafting replies without manual confirmation.</p>
+            <div className="how-it-works-image reveal" style={{ transitionDelay: '0.2s' }} ref={addToRefs}>
+              <Image
+                src="/Section6_v5.avif"
+                alt="Sauver shield — inbox defense visualization"
+                width={500}
+                height={500}
+                style={{ width: '100%', height: 'auto', borderRadius: '50%', opacity: 0.85 }}
+              />
             </div>
           </div>
         </section>
 
-        {/* Stats Band */}
-        <section className="stats-band" ref={statsRef}>
+        {/* ── Strike Back (Section4_v3) ───────────────────── */}
+        <section className="strike-back-section">
+          <div className="strike-inner">
+            <div className="section-label mono reveal" ref={addToRefs}>THE BOUNCER REPLY</div>
+            <h2 className="reveal" style={{ transitionDelay: '0.1s' }} ref={addToRefs}>
+              DON&apos;T JUST FILTER.<br /><span>FIGHT BACK.</span>
+            </h2>
+            <p className="strike-desc reveal" style={{ transitionDelay: '0.2s' }} ref={addToRefs}>
+              When Sauver detects a recruiter mass-blast or sales template, it doesn&apos;t just archive it.
+              It deploys an <strong>Expert-Domain Trap</strong> — a hyper-specific technical challenge no
+              automated system can answer. The cognitive load shifts permanently back to the sender.
+            </p>
+            <div className="strike-features reveal" style={{ transitionDelay: '0.3s' }} ref={addToRefs}>
+              <div className="strike-feature">
+                <div className="strike-feature-icon">⟹</div>
+                <h4>Expert-Domain Traps</h4>
+                <p>Hyper-specific questions only a real human can answer, customized to the sender&apos;s claimed domain.</p>
+              </div>
+              <div className="strike-feature">
+                <div className="strike-feature-icon">⊘</div>
+                <h4>Bouncer Replies</h4>
+                <p>Engages generic spammers with absurd, bureaucratic, or confusing automated replies to drain their resources.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Stats ───────────────────────────────────────── */}
+        <section className="stats-band" ref={(el) => { statsRef.current = el; }}>
+          <div className="stats-shield-bg" aria-hidden="true">
+            <Image
+              src="/Section6_v5.avif"
+              alt=""
+              width={600}
+              height={600}
+              style={{ width: '600px', height: '600px', objectFit: 'contain', opacity: 0.07 }}
+            />
+          </div>
           <div className="stats-grid">
-            <div className="stat-item">
-              <div className="stat-val">{formatStat('trackers', stats.trackers)}</div>
-              <div className="stat-label">Trackers Blocked</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-val">{formatStat('accuracy', stats.accuracy)}</div>
-              <div className="stat-label">Detection Accuracy</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-val">{formatStat('timeSaved', stats.timeSaved)}</div>
-              <div className="stat-label">Time Reclaimed</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-val">{formatStat('slop', stats.slop)}</div>
-              <div className="stat-label">Slop Reduction</div>
-            </div>
+            {statItems.map(({ key, label }) => (
+              <div key={key} className="stat-item">
+                <div className="stat-val">{formatStat(key, stats[key])}</div>
+                <div className="stat-label">{label}</div>
+              </div>
+            ))}
           </div>
         </section>
 
-        {/* Installation */}
+        {/* ── Installation ────────────────────────────────── */}
         <section id="installation" className="section-container">
           <div className="section-header reveal" ref={addToRefs}>
+            <div className="section-label mono">INSTALLATION</div>
             <h2>QUICK <span>START</span></h2>
           </div>
           <div className="installation-content">
             <div className="install-step reveal" ref={addToRefs}>
-              <h3>1. Prerequisites</h3>
-              <p>Ensure you have Python 3.10+ and Node.js installed, as Sauver is a Python-based tool designed to run as a Gemini CLI extension.</p>
+              <h3><span className="step-n">1</span>Prerequisites</h3>
+              <p>Ensure you have Python 3.10+ and the <a href="https://github.com/google-gemini/gemini-cli" className="inline-link">Gemini CLI</a> installed.</p>
             </div>
-            
             <div className="install-step reveal" ref={addToRefs}>
-              <h3>2. Setup and Installation</h3>
+              <h3><span className="step-n">2</span>One-Line Install</h3>
               <div className="code-mockup">
-                <span className="token-comment"># Clone the repository</span><br />
-                <span className="token-key">git clone</span> https://github.com/mszczodrak/sauver.git<br />
-                <span className="token-key">cd</span> sauver<br /><br />
-                <span className="token-comment"># Run the setup script</span><br />
-                <span className="token-key">./scripts/setup.sh</span>
+                <span className="token-key">gemini extensions install</span>{' '}
+                https://github.com/mszczodrak/sauver{' '}
+                <span className="token-comment">--consent</span>
               </div>
             </div>
-
             <div className="install-step reveal" ref={addToRefs}>
-              <h3>3. Configure Credentials</h3>
-              <p>Sauver requires access to your Gmail. Provide a <code>credentials.json</code> file (from Google Cloud Console) in the root directory. On first run, it will open a browser to generate a <code>token.json</code>.</p>
+              <h3><span className="step-n">3</span>Configure Gmail Access</h3>
+              <p>Provide a <code>credentials.json</code> from Google Cloud Console. On first run, a browser window opens to authorize access and generate <code>token.json</code>.</p>
             </div>
-
             <div className="install-step reveal" ref={addToRefs}>
-              <h3>4. Install as Gemini CLI Extension</h3>
+              <h3><span className="step-n">4</span>Use It</h3>
               <div className="code-mockup">
-                <span className="token-key">gemini extension install .</span>
-              </div>
-            </div>
-
-            <div className="install-step reveal" ref={addToRefs}>
-              <h3>5. Running the Tool</h3>
-              <p>Via Python:</p>
-              <div className="code-mockup">
-                <span className="token-comment"># Activate the virtual environment</span><br />
-                <span className="token-key">source</span> .venv/bin/activate<br />
-                <span className="token-comment"># Run the main script</span><br />
-                <span className="token-key">python</span> src/main.py
-              </div>
-              <p style={{ marginTop: '20px' }}>Via Gemini CLI:</p>
-              <div className="code-mockup">
-                <span className="token-comment"># Ask the assistant to perform tasks</span><br />
-                "Sauver, check my inbox for slop"
-              </div>
-            </div>
-
-            <div className="install-step reveal" ref={addToRefs}>
-              <h3>6. Development & Testing</h3>
-              <div className="code-mockup">
-                <span className="token-comment"># Run tests using the Makefile</span><br />
-                <span className="token-key">make test</span>
+                <span className="token-comment"># Ask the assistant to defend your inbox</span><br />
+                <span className="token-val">&quot;Sauver, scan my inbox for slop&quot;</span><br />
+                <span className="token-val">&quot;Sauver, deploy traps on the last 10 recruiter emails&quot;</span>
               </div>
             </div>
           </div>
         </section>
+
       </main>
 
       <footer>
@@ -310,12 +385,12 @@ export default function Home() {
               <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.47 4.34-2.98 8.19-7 9.49V12H5V6.3l7-3.11v8.8z" /></svg>
               SAUVER
             </Link>
-            <p>The Digital Bouncer for your Workspace. Professional protection against automated outreach.</p>
+            <p>The Digital Bouncer for your Inbox. Professional protection against automated outreach.</p>
           </div>
           <div className="footer-col">
             <h4>Product</h4>
             <ul>
-              <li><Link href="#who-it-is-for">Who it is for</Link></li>
+              <li><Link href="#who-it-is-for">Who it&apos;s for</Link></li>
               <li><Link href="#how-it-works">How it works</Link></li>
               <li><Link href="#installation">Installation</Link></li>
             </ul>
@@ -325,6 +400,8 @@ export default function Home() {
             <ul>
               <li><Link href="https://github.com/mszczodrak/sauver">GitHub</Link></li>
               <li><Link href="#">Documentation</Link></li>
+              <li><Link href="/llms.txt">llms.txt</Link></li>
+
             </ul>
           </div>
           <div className="footer-col">
@@ -336,36 +413,9 @@ export default function Home() {
           </div>
         </div>
         <div className="footer-bottom">
-          &copy; 2026 Sauver. Join the Resistance. 🛡️
+          &copy; 2026 Sauver. Join the Resistance.
         </div>
       </footer>
-
-      <style jsx>{`
-        .installation-content {
-          max-width: 800px;
-          margin: 0 auto;
-        }
-        .install-step {
-          margin-bottom: 40px;
-        }
-        .install-step h3 {
-          font-family: 'DM Sans', sans-serif;
-          font-size: 20px;
-          margin-bottom: 12px;
-          color: var(--accent-amber);
-        }
-        .install-step p {
-          color: var(--text-secondary);
-          margin-bottom: 16px;
-        }
-        code {
-          background: rgba(255,255,255,0.1);
-          padding: 2px 6px;
-          border-radius: 4px;
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 0.9em;
-        }
-      `}</style>
     </>
   );
 }

@@ -1,0 +1,42 @@
+# Sauver
+
+> The Digital Bouncer for your Inbox. A local-first, AI-powered Gmail defense layer that neutralizes surveillance and strikes back at automated outreach.
+
+Sauver is a Gemini CLI Extension that integrates with Gmail to perform automated inbox triage and active defense. It doesn't just filter spam — it fights back.
+
+## Core Features
+
+- **Tracker Shielding:** Identifies and strips 1x1 tracking pixels and surveillance beacons from HTML emails before they phone home.
+- **Slop Detection:** Uses AI to classify email intent, distinguishing genuine human outreach from automated "job slop" and mass-marketing templates.
+- **Expert-Domain Traps:** Targets recruiters and sales reps with hyper-specific, technically demanding questions that shift cognitive load back to the sender.
+- **Bouncer Replies:** Engages generic spammers with absurd, bureaucratic, or confusing automated replies to waste their time and resources.
+- **Inbox Triage:** Automatically categorizes, labels, and archives emails by content and risk level.
+- **YOLO Mode:** Optionally sends trap replies automatically instead of saving as drafts.
+
+## Technical Details
+
+- **Stack:** Python, Shell, FastMCP
+- **Integration:** Gemini CLI Extension
+- **License:** MIT
+- **Local-first:** All processing happens within the user's controlled environment. No data leaves the machine.
+
+## Installation
+
+```
+gemini extensions install https://github.com/mszczodrak/sauver --consent
+```
+
+Requires Python 3.10+ and Gemini CLI. Gmail credentials via Google Cloud Console (`credentials.json`).
+
+## Usage
+
+Invoke through Gemini CLI:
+- "Sauver, scan my inbox for slop"
+- "Sauver, deploy traps on the last 10 recruiter emails"
+- "Sauver, check for tracking pixels in my unread messages"
+
+## Links
+
+- Source Code: https://github.com/mszczodrak/sauver
+- Manifesto: https://github.com/mszczodrak/sauver/blob/main/MANIFESTO.md
+- Website: https://sauver.org
