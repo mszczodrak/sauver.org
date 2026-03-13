@@ -3,66 +3,25 @@
 import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 
-// Feed Data
-const initialFeedData = [
-  { status: 'blocked', email: 'toxic@spamlist.ru', reason: 'Toxicity detected', icon: '✗' },
-  { status: 'allowed', email: 'john.doe@acme.com', reason: 'Clean & verified', icon: '✓' },
-  { status: 'blocked', email: 'info@phish-domain.xyz', reason: 'Domain flagged', icon: '✗' },
-  { status: 'allowed', email: 'sarah@startup.io', reason: 'Deliverable', icon: '✓' },
-  { status: 'blocked', email: 'noreply@breachedlist.com', reason: 'Known breach', icon: '✗' },
-  { status: 'allowed', email: 'marcus@enterprise.co', reason: 'Valid MX record', icon: '✓' }
-];
-
-// Stats targets
+// Stats targets (repurposed for Sauver)
 const statTargets = {
-  teams: 4200,
-  accuracy: 99.7,
-  speed: 200,
-  unknown: 0.3
+  trackers: 10000,
+  accuracy: 99.9,
+  timeSaved: 50,
+  slop: 95
 };
-
-// API Code lines
-const codeLines = [
-  '<span class="token-comment">// Request</span>',
-  '<span class="token-key">POST</span> https://api.sauver.org/v1/verify',
-  '',
-  '{',
-  '  <span class="token-key">"email"</span>: <span class="token-val">"user@domain.com"</span>,',
-  '  <span class="token-key">"api_key"</span>: <span class="token-val">"sk_live_••••••••••"</span>',
-  '}',
-  '',
-  '<span class="token-comment">// Response</span>',
-  '{',
-  '  <span class="token-key">"status"</span>: <span class="token-val">"safe"</span>,',
-  '  <span class="token-key">"score"</span>: <span class="token-val">98</span>,',
-  '  <span class="token-key">"checks"</span>: {',
-  '    <span class="token-key">"syntax"</span>:    <span class="token-val">"✓ pass"</span>,',
-  '    <span class="token-key">"domain"</span>:    <span class="token-val">"✓ pass"</span>,',
-  '    <span class="token-key">"toxicity"</span>:  <span class="token-val">"✓ clean"</span>',
-  '  }',
-  '}'
-];
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
 
-  // Live Feed State
-  const [feedIndex, setFeedIndex] = useState(4);
-  const [liveFeed, setLiveFeed] = useState(initialFeedData.slice(0, 4).reverse());
-
   // Stats Counters State
   const [statsStarted, setStatsStarted] = useState(false);
-  const [stats, setStats] = useState({ teams: 0, accuracy: 0, speed: 0, unknown: 0 });
-
-  // Typewriter State
-  const [typewriterStarted, setTypewriterStarted] = useState(false);
-  const [displayedCode, setDisplayedCode] = useState<string[]>([]);
+  const [stats, setStats] = useState({ trackers: 0, accuracy: 0, timeSaved: 0, slop: 0 });
 
   // Refs
   const revealRefs = useRef<(HTMLElement | null)[]>([]);
   const statsRef = useRef<HTMLElement | null>(null);
-  const apiRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     // Scrollspy
@@ -90,7 +49,6 @@ export default function Home() {
         if (entry.isIntersecting) {
           entry.target.classList.add('active');
           if (entry.target.classList.contains('stats-band')) setStatsStarted(true);
-          if (entry.target.id === 'api') setTypewriterStarted(true);
         }
       });
     }, observerOptions);
@@ -99,26 +57,8 @@ export default function Home() {
       if (el) observer.observe(el);
     });
     if (statsRef.current) observer.observe(statsRef.current);
-    if (apiRef.current) observer.observe(apiRef.current);
 
     return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    // Live feed interval
-    const interval = setInterval(() => {
-      setFeedIndex(prev => {
-        const nextIdx = prev + 1;
-        const newData = initialFeedData[prev % initialFeedData.length];
-        setLiveFeed(currentFeed => {
-          const updatedFeed = [newData, ...currentFeed];
-          if (updatedFeed.length > 8) return updatedFeed.slice(0, 8);
-          return updatedFeed;
-        });
-        return nextIdx;
-      });
-    }, 2000);
-    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -132,10 +72,10 @@ export default function Home() {
       const progress = Math.min(elapsed / duration, 1);
 
       setStats({
-        teams: progress * statTargets.teams,
+        trackers: progress * statTargets.trackers,
         accuracy: progress * statTargets.accuracy,
-        speed: progress * statTargets.speed,
-        unknown: progress * statTargets.unknown
+        timeSaved: progress * statTargets.timeSaved,
+        slop: progress * statTargets.slop
       });
 
       if (progress < 1) {
@@ -147,30 +87,11 @@ export default function Home() {
     requestAnimationFrame(animateStats);
   }, [statsStarted]);
 
-  useEffect(() => {
-    // Typewriter
-    if (!typewriterStarted) return;
-    let lineIdx = 0;
-    const typeLine = () => {
-      if (lineIdx < codeLines.length) {
-        setDisplayedCode(prev => {
-          if (prev.length === lineIdx) {
-            return [...prev, codeLines[lineIdx]];
-          }
-          return prev;
-        });
-        lineIdx++;
-        setTimeout(typeLine, 100);
-      }
-    };
-    typeLine();
-  }, [typewriterStarted]);
-
   const formatStat = (key: string, val: number) => {
-    if (key === 'teams') return val >= 4200 ? '4,200+' : Math.floor(val);
-    if (key === 'accuracy') return val >= 99.7 ? '99.7%' : val.toFixed(1) + '%';
-    if (key === 'speed') return val >= 200 ? '200K' : Math.floor(val) + 'K';
-    if (key === 'unknown') return val >= 0.3 ? '< 0.3%' : '< ' + val.toFixed(1) + '%';
+    if (key === 'trackers') return val >= 10000 ? '10K+' : Math.floor(val);
+    if (key === 'accuracy') return val >= 99.9 ? '99.9%' : val.toFixed(1) + '%';
+    if (key === 'timeSaved') return val >= 50 ? '50h+' : Math.floor(val) + 'h';
+    if (key === 'slop') return val >= 95 ? '95%' : val.toFixed(1) + '%';
     return val;
   };
 
@@ -199,11 +120,11 @@ export default function Home() {
             padding: mobileMenuOpen ? '40px' : undefined,
             borderBottom: mobileMenuOpen ? '1px solid var(--border-amber)' : undefined
           }}>
-            <Link href="#features" className={activeSection === 'features' ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>Features</Link>
-            <Link href="#how-it-works" className={activeSection === 'how-it-works' ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>How It Works</Link>
+            <Link href="#who-it-is-for" className={activeSection === 'who-it-is-for' ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>Who it is for</Link>
+            <Link href="#how-it-works" className={activeSection === 'how-it-works' ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>How it works</Link>
+            <Link href="#installation" className={activeSection === 'installation' ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>Installation</Link>
 
-
-            <button className="btn btn-cta pulse">Start Free</button>
+            <button className="btn btn-cta pulse">Install Now</button>
           </div>
           <button className="hamburger" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             <span></span>
@@ -214,7 +135,7 @@ export default function Home() {
       </nav>
 
       <main>
-        {/* 2. Hero Section */}
+        {/* Hero Section */}
         <section className="hero">
           <div className="hero-bg-visual">
             <svg width="100%" height="100%" viewBox="0 0 800 800">
@@ -225,145 +146,163 @@ export default function Home() {
           </div>
           <div className="hero-eyebrow mono reveal" style={{ transitionDelay: '0.1s' }} ref={addToRefs}>
             <div className="dot-blink"></div>
-            [ INBOX PROTECTION ACTIVE ]
+            [ AUTONOMOUS INBOX DEFENSE ACTIVE ]
           </div>
           <h1 className="reveal" style={{ transitionDelay: '0.25s' }} ref={addToRefs}>
-            YOUR INBOX HAS<br />
-            A NEW <span>BOUNCER.</span>
+            RECLAIM YOUR<br />
+            <span>ATTENTION.</span>
           </h1>
           <p className="reveal" style={{ transitionDelay: '0.4s' }} ref={addToRefs}>
-            Sauver acts as your digital gatekeeper — blocking harmful, invalid, and toxic emails before they ever reach your inbox or damage your sender reputation.
+            Sauver is a Gemini CLI Extension that integrates directly with your digital workspace (specifically Gmail) to perform automated triage and defense.
           </p>
           <div className="hero-btns reveal" style={{ transitionDelay: '0.55s' }} ref={addToRefs}>
-            <button className="btn btn-cta">Protect My Inbox &rarr;</button>
-            <button className="btn btn-outline">See How It Works</button>
-          </div>
-
-        </section>
-
-        {/* 3. Live Protection Feed */}
-        <section className="live-feed-section">
-          <div className="feed-container">
-            <div className="feed-title">Live Protection Feed</div>
-            <div className="feed-list" id="live-feed">
-              {liveFeed.map((data, idx) => (
-                <div key={idx} className={`feed-row ${data.status}`}>
-                  <span>{data.icon} {data.status.toUpperCase()}</span>
-                  <span>{data.email}</span>
-                  <span>{data.reason}</span>
-                </div>
-              ))}
-            </div>
+            <Link href="#installation" className="btn btn-cta">Get Started &rarr;</Link>
+            <Link href="#how-it-works" className="btn btn-outline">How it works</Link>
           </div>
         </section>
 
-        {/* 4. Features Section */}
-        <section id="features" className="section-container">
+        {/* Who it is for */}
+        <section id="who-it-is-for" className="section-container">
           <div className="section-header reveal" ref={addToRefs}>
-            <h2>WHAT THE <span>BOUNCER</span> CHECKS</h2>
+            <h2>WHO IT IS <span>FOR</span></h2>
           </div>
           <div className="grid-features">
             <div className="feature-card reveal" ref={addToRefs}>
               <div className="feature-icon">
-                <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>
+                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
               </div>
-              <h3>Syntax Validation</h3>
-              <p>Instantly rejects malformed addresses before they enter your system with RFC-compliant checks.</p>
+              <h3>Privacy-conscious users</h3>
+              <p>People who want to stop hidden tracking pixels from reporting their activity back to senders.</p>
             </div>
             <div className="feature-card reveal" ref={addToRefs}>
               <div className="feature-icon">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg>
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
               </div>
-              <h3>Domain & MX Verification</h3>
-              <p>Confirms the email domain exists and routes to a live mail server in real-time.</p>
+              <h3>Deep workers</h3>
+              <p>Professionals who need to reclaim their attention from a bombardment of low-quality, automated outreach.</p>
             </div>
             <div className="feature-card reveal" ref={addToRefs}>
               <div className="feature-icon">
-                <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>
+                <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg>
               </div>
-              <h3>Toxicity Detection</h3>
-              <p>Flags known complainers, litigators, spam traps, and addresses found on breach lists.</p>
-            </div>
-            <div className="feature-card reveal" ref={addToRefs}>
-              <div className="feature-icon">
-                <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-14 8.38 8.38 0 0 1 3.8.9L21 3.5Z" /></svg>
-              </div>
-              <h3>Catch-All Detection</h3>
-              <p>Identifies role-based emails (info@, support@) and throwaway addresses to protect quality.</p>
-            </div>
-            <div className="feature-card reveal" ref={addToRefs}>
-              <div className="feature-icon">
-                <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
-              </div>
-              <h3>Real-Time API Shield</h3>
-              <p>Block bad emails at point-of-entry on any web form with zero-latency validation.</p>
-            </div>
-            <div className="feature-card reveal" ref={addToRefs}>
-              <div className="feature-icon">
-                <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
-              </div>
-              <h3>Reputation Guard</h3>
-              <p>Keeps your bounce rate below 2% so your sender reputation remains pristine on all providers.</p>
+              <h3>The "Resistance"</h3>
+              <p>Those who want to actively mirror the tactics of automated predators by wasting the time of those who waste theirs.</p>
             </div>
           </div>
         </section>
 
-        {/* 5. How It Works */}
-        <section id="how-it-works" className="how-it-works">
-          <div className="section-container">
-            <div className="section-header reveal" ref={addToRefs}>
-              <h2>HOW IT WORKS</h2>
+        {/* How it works */}
+        <section id="how-it-works" className="section-container" style={{ background: 'var(--surface-primary)' }}>
+          <div className="section-header reveal" ref={addToRefs}>
+            <h2>HOW IT <span>WORKS</span></h2>
+          </div>
+          <div className="grid-features">
+            <div className="feature-card reveal" ref={addToRefs}>
+              <h3>1. Tracker Shielding</h3>
+              <p>It analyzes incoming emails to identify and neutralize tracking pixels and automated intent.</p>
             </div>
-            <div className="steps-container">
-              <div className="step reveal" ref={addToRefs}>
-                <div className="step-num-bg">01</div>
-                <h3>SUBMIT</h3>
-                <p>Drop your email list or connect via API. CSV, Excel, or real-time webhook — Sauver accepts them all.</p>
-              </div>
-              <div className="step reveal" style={{ transitionDelay: '0.1s' }} ref={addToRefs}>
-                <div className="step-num-bg">02</div>
-                <h3>ANALYZE</h3>
-                <p>Our engine runs 7 checks per address: syntax, domain, MX, toxicity, disposable, and catch-all detection.</p>
-              </div>
-              <div className="step reveal" style={{ transitionDelay: '0.2s' }} ref={addToRefs}>
-                <div className="step-num-bg">03</div>
-                <h3>RESULTS</h3>
-                <p>Download a clean, scored list. Every address is labeled: Safe, Risky, or Block. Act on data, not guesses.</p>
-              </div>
+            <div className="feature-card reveal" ref={addToRefs}>
+              <h3>2. Slop Detection</h3>
+              <p>It uses AI to distinguish between genuine human communication and "slop"—machine-generated pitches and mass-marketing noise.</p>
+            </div>
+            <div className="feature-card reveal" ref={addToRefs}>
+              <h3>3. Active Defense (Bouncer Replies)</h3>
+              <p>Instead of just deleting spam, it can stage automated "bouncer" replies to engage with and waste the resources of automated senders.</p>
+            </div>
+            <div className="feature-card reveal" ref={addToRefs}>
+              <h3>4. Inbox Triage</h3>
+              <p>It automatically categorizes, labels, and archives emails based on their content and risk level, keeping your inbox focused on what matters.</p>
+            </div>
+            <div className="feature-card reveal" ref={addToRefs}>
+              <h3>5. Autonomous Operation</h3>
+              <p>Guided by its GEMINI.md mandates, it can perform bulk operations like searching, labeling, and drafting replies without manual confirmation.</p>
             </div>
           </div>
         </section>
 
-        {/* 6. Stats Band */}
+        {/* Stats Band */}
         <section className="stats-band" ref={statsRef}>
           <div className="stats-grid">
             <div className="stat-item">
-              <div className="stat-val">{formatStat('teams', stats.teams)}</div>
-              <div className="stat-label">Teams Protected</div>
+              <div className="stat-val">{formatStat('trackers', stats.trackers)}</div>
+              <div className="stat-label">Trackers Blocked</div>
             </div>
             <div className="stat-item">
               <div className="stat-val">{formatStat('accuracy', stats.accuracy)}</div>
-              <div className="stat-label">Accuracy Rate</div>
+              <div className="stat-label">Detection Accuracy</div>
             </div>
             <div className="stat-item">
-              <div className="stat-val">{formatStat('speed', stats.speed)}</div>
-              <div className="stat-label">Verification Speed</div>
+              <div className="stat-val">{formatStat('timeSaved', stats.timeSaved)}</div>
+              <div className="stat-label">Time Reclaimed</div>
             </div>
             <div className="stat-item">
-              <div className="stat-val">{formatStat('unknown', stats.unknown)}</div>
-              <div className="stat-label">Unknown Results</div>
+              <div className="stat-val">{formatStat('slop', stats.slop)}</div>
+              <div className="stat-label">Slop Reduction</div>
             </div>
           </div>
         </section>
 
+        {/* Installation */}
+        <section id="installation" className="section-container">
+          <div className="section-header reveal" ref={addToRefs}>
+            <h2>QUICK <span>START</span></h2>
+          </div>
+          <div className="installation-content">
+            <div className="install-step reveal" ref={addToRefs}>
+              <h3>1. Prerequisites</h3>
+              <p>Ensure you have Python 3.10+ and Node.js installed, as Sauver is a Python-based tool designed to run as a Gemini CLI extension.</p>
+            </div>
+            
+            <div className="install-step reveal" ref={addToRefs}>
+              <h3>2. Setup and Installation</h3>
+              <div className="code-mockup">
+                <span className="token-comment"># Clone the repository</span><br />
+                <span className="token-key">git clone</span> https://github.com/mszczodrak/sauver.git<br />
+                <span className="token-key">cd</span> sauver<br /><br />
+                <span className="token-comment"># Run the setup script</span><br />
+                <span className="token-key">./scripts/setup.sh</span>
+              </div>
+            </div>
 
+            <div className="install-step reveal" ref={addToRefs}>
+              <h3>3. Configure Credentials</h3>
+              <p>Sauver requires access to your Gmail. Provide a <code>credentials.json</code> file (from Google Cloud Console) in the root directory. On first run, it will open a browser to generate a <code>token.json</code>.</p>
+            </div>
 
+            <div className="install-step reveal" ref={addToRefs}>
+              <h3>4. Install as Gemini CLI Extension</h3>
+              <div className="code-mockup">
+                <span className="token-key">gemini extension install .</span>
+              </div>
+            </div>
 
+            <div className="install-step reveal" ref={addToRefs}>
+              <h3>5. Running the Tool</h3>
+              <p>Via Python:</p>
+              <div className="code-mockup">
+                <span className="token-comment"># Activate the virtual environment</span><br />
+                <span className="token-key">source</span> .venv/bin/activate<br />
+                <span className="token-comment"># Run the main script</span><br />
+                <span className="token-key">python</span> src/main.py
+              </div>
+              <p style={{ marginTop: '20px' }}>Via Gemini CLI:</p>
+              <div className="code-mockup">
+                <span className="token-comment"># Ask the assistant to perform tasks</span><br />
+                "Sauver, check my inbox for slop"
+              </div>
+            </div>
 
-
+            <div className="install-step reveal" ref={addToRefs}>
+              <h3>6. Development & Testing</h3>
+              <div className="code-mockup">
+                <span className="token-comment"># Run tests using the Makefile</span><br />
+                <span className="token-key">make test</span>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
 
-      {/* 10. Footer */}
       <footer>
         <div className="footer-grid">
           <div className="footer-brand">
@@ -371,24 +310,21 @@ export default function Home() {
               <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.47 4.34-2.98 8.19-7 9.49V12H5V6.3l7-3.11v8.8z" /></svg>
               SAUVER
             </Link>
-            <p>The Digital Bouncer for your Inbox. Professional protection for high-volume senders.</p>
+            <p>The Digital Bouncer for your Workspace. Professional protection against automated outreach.</p>
           </div>
           <div className="footer-col">
             <h4>Product</h4>
             <ul>
-              <li><Link href="#features">Features</Link></li>
-
-
-              <li><Link href="#">Changelog</Link></li>
+              <li><Link href="#who-it-is-for">Who it is for</Link></li>
+              <li><Link href="#how-it-works">How it works</Link></li>
+              <li><Link href="#installation">Installation</Link></li>
             </ul>
           </div>
           <div className="footer-col">
-            <h4>Company</h4>
+            <h4>Resources</h4>
             <ul>
-              <li><Link href="#">About</Link></li>
-              <li><Link href="#">Blog</Link></li>
-              <li><Link href="#">Press</Link></li>
-
+              <li><Link href="https://github.com/mszczodrak/sauver">GitHub</Link></li>
+              <li><Link href="#">Documentation</Link></li>
             </ul>
           </div>
           <div className="footer-col">
@@ -396,15 +332,40 @@ export default function Home() {
             <ul>
               <li><Link href="#">Privacy Policy</Link></li>
               <li><Link href="#">Terms of Service</Link></li>
-              <li><Link href="#">GDPR</Link></li>
-              <li><Link href="#">Security</Link></li>
             </ul>
           </div>
         </div>
         <div className="footer-bottom">
-          &copy; 2025 Sauver. Built with obsession for inbox hygiene. 🛡️
+          &copy; 2026 Sauver. Join the Resistance. 🛡️
         </div>
       </footer>
+
+      <style jsx>{`
+        .installation-content {
+          max-width: 800px;
+          margin: 0 auto;
+        }
+        .install-step {
+          margin-bottom: 40px;
+        }
+        .install-step h3 {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 20px;
+          margin-bottom: 12px;
+          color: var(--accent-amber);
+        }
+        .install-step p {
+          color: var(--text-secondary);
+          margin-bottom: 16px;
+        }
+        code {
+          background: rgba(255,255,255,0.1);
+          padding: 2px 6px;
+          border-radius: 4px;
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.9em;
+        }
+      `}</style>
     </>
   );
 }
