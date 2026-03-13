@@ -2,7 +2,7 @@
 
 > The Digital Bouncer for your Inbox. A local-first, AI-powered Gmail defense layer that neutralizes surveillance and strikes back at automated outreach.
 
-Sauver is a Gemini CLI Extension that integrates with Gmail to perform automated inbox triage and active defense. It doesn't just filter spam — it fights back.
+Sauver is a set of specialized skills for Gemini CLI and Claude Code that integrates with Gmail to perform automated inbox triage and active defense. It doesn't just filter spam — it fights back.
 
 ## Core Features
 
@@ -11,29 +11,132 @@ Sauver is a Gemini CLI Extension that integrates with Gmail to perform automated
 - **Expert-Domain Traps:** Targets recruiters and sales reps with hyper-specific, technically demanding questions that shift cognitive load back to the sender.
 - **Bouncer Replies:** Engages generic spammers with absurd, bureaucratic, or confusing automated replies to waste their time and resources.
 - **Inbox Triage:** Automatically categorizes, labels, and archives emails by content and risk level.
-- **YOLO Mode:** Optionally sends trap replies automatically instead of saving as drafts.
+- **YOLO Mode:** (Gemini CLI only) Optionally sends trap replies automatically instead of saving as drafts.
+
+## Skills Registry
+
+| Skill | Role | Counter-Measure |
+| :--- | :--- | :--- |
+| `sauver-inbox-assistant` | Triage Orchestrator | End-to-end pipeline management |
+| `tracker-shield` | Surveillance Purifier | Neutralizes tracking pixels and spy-links |
+| `slop-detector` | Intent Classifier | Deploys the Expert-Domain Trap for recruiters |
+| `investor-trap` | VC-Slop Shield | Deploys the Due Diligence Loop for "investors" |
+| `bouncer-reply` | Time-Waster | Generates context-aware, confusing drafts for spammers |
+
+---
+
+## Installation: Gemini CLI
+
+The easiest setup. One command installs and configures everything.
+
+### Prerequisites
+
+- Python 3.10+
+- Gemini CLI installed
+
+### Install
+
+```bash
+gemini extensions install https://github.com/mszczodrak/sauver --consent
+```
+
+### Configure Gmail Access
+
+Provide a `credentials.json` from Google Cloud Console in the repo root. On first run, a browser window opens to authorize access and generate `token.json`.
+
+### Configuration
+
+Sauver stores preferences in a local `.sauver-config.json`. Manage it via the Gemini CLI:
+
+```
+# View current config
+get_sauver_config
+
+# Update a setting
+set_sauver_config(updates={"yolo_mode": true})
+
+# Run interactive setup wizard
+start_sauver_config_wizard
+```
+
+#### Configuration Options
+
+| Option | Description | Default |
+| :--- | :--- | :--- |
+| `auto_draft` | Automatically create draft replies to detected slop | `true` |
+| `yolo_mode` | Auto-send replies — bypasses draft review (dangerous) | `false` |
+| `treat_job_offers_as_slop` | Treat recruiter outreach as slop (Expert-Domain Trap) | `true` |
+| `treat_unsolicited_investors_as_slop` | Treat unsolicited investor outreach as slop | `true` |
+| `sauver_label` | Gmail label applied when an email is archived | `"Sauver"` |
+
+### Usage (Gemini CLI)
+
+```
+# Full inbox triage
+"Use the sauver-inbox-assistant to triage my last 10 unread emails"
+
+# Disable job filter if actively job searching
+"Update my config to not treat job offers as slop"
+
+# Target a specific email
+"Use slop-detector on this email: [paste subject]"
+```
+
+---
+
+## Installation: Claude Code
+
+Sauver's skills are available as slash commands in Claude Code. Claude Code must be opened inside the cloned repository.
+
+### Prerequisites
+
+1. **Gmail MCP Server** — Sauver uses the `mcp__claude_ai_Gmail__*` tools. Follow the Gmail MCP setup guide at https://github.com/anthropics/claude-code/tree/main/mcp to connect your Google account.
+
+2. **Clone the repo** — the Sauver MCP server is registered at the project level via `.claude/settings.json`. Claude Code must be opened from inside the repository directory.
+
+```bash
+git clone https://github.com/mszczodrak/sauver.git
+cd sauver
+claude   # open Claude Code from inside the repo
+```
+
+### Available Slash Commands
+
+| Command | What it does |
+| :--- | :--- |
+| `/sauver` | Full inbox triage — scans unread emails, strips trackers, classifies intent, and drafts a counter-measure for each slop email |
+| `/tracker-shield` | Strips tracking pixels and spy-links from a specific email |
+| `/slop-detector` | Analyzes an email for recruiter/sales slop and drafts an Expert-Domain Trap reply |
+| `/investor-trap` | Analyzes an email for investor slop and drafts a Due Diligence Loop reply |
+| `/bouncer-reply` | Drafts a Time-Sink Trap reply for a general spam or marketing email |
+
+### Usage (Claude Code)
+
+```
+# Triage everything unread
+/sauver
+
+# Target a specific email (paste the subject or message ID after the command)
+/slop-detector "We'd love to connect about an exciting opportunity"
+/tracker-shield
+/bouncer-reply
+```
+
+### Limitations vs. Gemini CLI
+
+The Gmail MCP server available in Claude Code does not currently expose `gmail_modify` or `gmail_send`, so:
+
+- **Archiving** — applying the `Sauver` label and removing from INBOX must be done manually after review.
+- **YOLO mode** — has no effect. All replies are saved as drafts regardless of the `yolo_mode` setting.
+
+---
 
 ## Technical Details
 
 - **Stack:** Python, Shell, FastMCP
-- **Integration:** Gemini CLI Extension
+- **Integration:** Gemini CLI Extension + Claude Code slash commands
 - **License:** MIT
 - **Local-first:** All processing happens within the user's controlled environment. No data leaves the machine.
-
-## Installation
-
-```
-gemini extensions install https://github.com/mszczodrak/sauver --consent
-```
-
-Requires Python 3.10+ and Gemini CLI. Gmail credentials via Google Cloud Console (`credentials.json`).
-
-## Usage
-
-Invoke through Gemini CLI:
-- "Sauver, scan my inbox for slop"
-- "Sauver, deploy traps on the last 10 recruiter emails"
-- "Sauver, check for tracking pixels in my unread messages"
 
 ## Links
 

@@ -261,6 +261,7 @@ nav.scrolled {
 .terminal {
   position: relative;
   z-index: 1;
+  text-align: left;
   background: #070710;
   border: 1px solid rgba(245, 166, 35, 0.2);
   border-radius: 12px;
@@ -596,6 +597,37 @@ nav.scrolled {
   letter-spacing: 0.08em;
 }
 
+/* ── Install Tabs ────────────────────────────── */
+.tab-bar {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border-amber);
+  margin-bottom: 48px;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: none;
+  color: var(--text-secondary);
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  letter-spacing: 0.01em;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.tab-btn:hover { color: var(--text-primary); }
+.tab-btn.active { color: var(--accent-amber); border-bottom-color: var(--accent-amber); }
+.tab-btn svg { flex-shrink: 0; opacity: 0.7; }
+.tab-btn.active svg { opacity: 1; }
+
 /* ── Installation ────────────────────────────── */
 .installation-content { max-width: 760px; margin: 0 auto; }
 
@@ -659,6 +691,111 @@ code {
 .code-mockup .token-key     { color: var(--accent-amber); }
 .code-mockup .token-val     { color: #C4C4E0; }
 .code-mockup .token-comment { color: #3A3A52; }
+
+/* ── Config Table ────────────────────────────── */
+.config-table {
+  margin-top: 20px;
+  border: 1px solid var(--border-amber);
+  border-radius: 6px;
+  overflow: hidden;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+}
+
+.config-row {
+  display: grid;
+  grid-template-columns: 280px 1fr 80px;
+  gap: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  align-items: center;
+}
+.config-row:last-child { border-bottom: none; }
+
+.config-row-header {
+  background: rgba(245,166,35,0.06);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+}
+
+.config-row > * { padding: 12px 16px; }
+.config-row > span { color: var(--text-secondary); font-family: 'DM Sans', sans-serif; font-size: 13px; }
+.config-row > code { color: var(--accent-amber); font-size: 12px; }
+.config-row-header > span { color: var(--text-secondary); }
+
+/* ── Command Table ───────────────────────────── */
+.cmd-table {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cmd-row {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 0;
+  background: var(--surface-card);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 4px;
+  align-items: center;
+  transition: border-color 0.2s ease;
+}
+.cmd-row:hover { border-color: var(--border-amber); }
+
+.cmd-name {
+  padding: 14px 16px;
+  color: var(--accent-amber);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  border-right: 1px solid rgba(255,255,255,0.04);
+}
+.cmd-desc {
+  padding: 14px 16px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ── Prereq List ─────────────────────────────── */
+.prereq-list {
+  list-style: none;
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.prereq-list li {
+  padding-left: 20px;
+  position: relative;
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.prereq-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent-amber);
+  font-size: 12px;
+  top: 3px;
+}
+.prereq-list li strong { color: var(--text-primary); }
+
+/* ── Limitation Box ──────────────────────────── */
+.limitation-box {
+  background: rgba(224,82,82,0.06);
+  border: 1px solid rgba(224,82,82,0.25);
+  border-left: 3px solid var(--status-danger);
+  border-radius: 4px;
+  padding: 20px 24px;
+  margin-top: 4px;
+}
+.limitation-box p { color: var(--text-secondary); font-size: 15px; line-height: 1.6; }
 
 /* ── Footer ──────────────────────────────────── */
 footer {
