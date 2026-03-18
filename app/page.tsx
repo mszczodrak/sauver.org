@@ -390,9 +390,9 @@ export default function Home() {
               <p>Run the automated installer to set up your local environment. Requires Node.js v18+.</p>
               <div className="code-mockup with-copy">
                 <div className="code-content">
-                  <span className="token-key">curl</span> -fsSL https://raw.githubusercontent.com/mszczodrak/sauver/main/scripts/install.sh | <span className="token-key">bash</span>
+                  <span className="token-key">curl</span> -fsSL https://sauver.org/install.sh | <span className="token-key">bash</span>
                 </div>
-                <CopyButton text="curl -fsSL https://raw.githubusercontent.com/mszczodrak/sauver/main/scripts/install.sh | bash" />
+                <CopyButton text="curl -fsSL https://sauver.org/install.sh | bash" />
               </div>
             </div>
 
