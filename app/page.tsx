@@ -3,6 +3,8 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 const TERMINAL_SEQUENCE = [
   { delay: 600, type: 'cmd', text: '$ sauver scan --inbox' },
@@ -127,11 +129,9 @@ function CopyButton({ text }: { text: string }) {
 }
 
 export default function Home() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const [statsStarted, setStatsStarted] = useState(false);
   const [stats, setStats] = useState({ trackers: 0, accuracy: 0, timeSaved: 0, slop: 0 });
-  const [scrolled, setScrolled] = useState(false);
   const [installTab, setInstallTab] = useState<'gemini' | 'claude'>('gemini');
 
   const revealRefs = useRef<(HTMLElement | null)[]>([]);
@@ -139,7 +139,6 @@ export default function Home() {
 
   useEffect(() => {
     const onScroll = () => {
-      setScrolled(window.scrollY > 20);
       let current = '';
       document.querySelectorAll<HTMLElement>('section[id]').forEach(s => {
         if (window.scrollY >= s.offsetTop - 120) current = s.id;
@@ -196,23 +195,7 @@ export default function Home() {
 
   return (
     <>
-      <nav className={scrolled ? 'scrolled' : ''}>
-        <div className="nav-container">
-          <Link href="#" className="logo">
-            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.47 4.34-2.98 8.19-7 9.49V12H5V6.3l7-3.11v8.8z" /></svg>
-            SAUVER
-          </Link>
-          <div className={`nav-links ${mobileMenuOpen ? 'open' : ''}`}>
-            <Link href="#who-it-is-for" className={activeSection === 'who-it-is-for' ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>Who it&apos;s for</Link>
-            <Link href="#how-it-works" className={activeSection === 'how-it-works' ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>How it works</Link>
-            <Link href="#installation" className={activeSection === 'installation' ? 'active' : ''} onClick={() => setMobileMenuOpen(false)}>Installation</Link>
-            <Link href="#installation" className="btn btn-cta pulse" onClick={() => setMobileMenuOpen(false)}>Install Now</Link>
-          </div>
-          <button className={`hamburger ${mobileMenuOpen ? 'open' : ''}`} aria-label="Toggle menu" onClick={() => setMobileMenuOpen(o => !o)}>
-            <span /><span /><span />
-          </button>
-        </div>
-      </nav>
+      <Navbar activeSection={activeSection} />
 
       <main>
 
@@ -477,44 +460,7 @@ export default function Home() {
 
       </main>
 
-      <footer>
-        <div className="footer-grid">
-          <div className="footer-brand">
-            <Link href="#" className="logo">
-              <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.47 4.34-2.98 8.19-7 9.49V12H5V6.3l7-3.11v8.8z" /></svg>
-              SAUVER
-            </Link>
-            <p>The Digital Bouncer for your Inbox. Professional protection against automated outreach.</p>
-          </div>
-          <div className="footer-col">
-            <h4>Product</h4>
-            <ul>
-              <li><Link href="#who-it-is-for">Who it&apos;s for</Link></li>
-              <li><Link href="#how-it-works">How it works</Link></li>
-              <li><Link href="#installation">Installation</Link></li>
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h4>Resources</h4>
-            <ul>
-              <li><Link href="https://github.com/mszczodrak/sauver">GitHub</Link></li>
-              <li><Link href="#">Documentation</Link></li>
-              <li><Link href="/llms.txt">llms.txt</Link></li>
-
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h4>Legal</h4>
-            <ul>
-              <li><Link href="#">Privacy Policy</Link></li>
-              <li><Link href="#">Terms of Service</Link></li>
-            </ul>
-          </div>
-        </div>
-        <div className="footer-bottom">
-          &copy; 2026 Sauver. Join the Resistance.
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 }
