@@ -381,7 +381,7 @@ export default function Home() {
         <section id="installation" className="section-container">
           <div className="section-header reveal" ref={addToRefs}>
             <div className="section-label mono">INSTALLATION</div>
-            <h2>TWO MINUTE <span>SETUP</span></h2>
+            <h2>THREE MINUTE <span>SETUP</span></h2>
           </div>
 
           <div className="installation-content">
@@ -416,18 +416,21 @@ export default function Home() {
               <div className="client-grid">
                 <div className="client-box">
                   <h4>Gemini CLI</h4>
-                  <p>The installer automatically configures Gemini CLI and registers the MCP server. Use slash commands or plain English:</p>
+                  <p>The installer registers the MCP server and populates global slash command shims in <code>~/.agent/workflows/</code>. Commands work from any directory:</p>
                   <div className="code-mockup compact">
                     <span className="token-key">/sauver</span>
                   </div>
                 </div>
                 <div className="client-box">
                   <h4>Claude Code</h4>
-                  <p>The installer automatically registers the MCP server in your <code>~/.claude/settings.json</code>. Just start Claude and use slash commands:</p>
+                  <p>The installer registers the MCP server in <code>~/.claude/settings.json</code> and writes global slash commands to <code>~/.claude/commands/</code>. Available in every session, from any directory:</p>
                   <div className="code-mockup compact">
                     <span className="token-key">/sauver</span>
                   </div>
                 </div>
+              </div>
+              <div className="info-box">
+                <p><strong>Auto-updates:</strong> The MCP server silently checks for skill updates on GitHub once a day at startup. A one-line message appears when an update is applied — just restart your AI client to pick it up.</p>
               </div>
             </div>
 
@@ -464,7 +467,9 @@ export default function Home() {
                 <span className="token-comment"># Due Diligence Loop for unsolicited investors</span><br />
                 <span className="token-key">/investor-trap</span><br /><br />
                 <span className="token-comment"># Time-Sink Trap for generic spam</span><br />
-                <span className="token-key">/bouncer-reply</span>
+                <span className="token-key">/bouncer-reply</span><br /><br />
+                <span className="token-comment"># Label and archive a specific thread on demand</span><br />
+                <span className="token-key">/archiver</span>
               </div>
             </div>
           </div>
