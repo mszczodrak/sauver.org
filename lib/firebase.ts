@@ -11,15 +11,24 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-let app: FirebaseApp;
+// Check if the configuration is complete enough to initialize
+const isConfigValid = !!firebaseConfig.apiKey && !!firebaseConfig.projectId && !!firebaseConfig.appId;
 
-if (getApps().length === 0) {
-  console.log("🔥 Initializing Firebase with environment variables...");
-  app = initializeApp(firebaseConfig);
-} else {
-  // Reuse existing app instance (for hot-reloading)
-  console.log("♻️ Reusing existing Firebase app instance.");
-  app = getApps()[0];
+let app: FirebaseApp | undefined;
+
+if (typeof window !== 'undefined' || getApps().length === 0) {
+  if (isConfigValid) {
+    if (getApps().length === 0) {
+      console.log("🔥 Initializing Firebase with environment variables...");
+      app = initializeApp(firebaseConfig);
+    } else {
+      // Reuse existing app instance (for hot-reloading)
+      console.log("♻️ Reusing existing Firebase app instance.");
+      app = getApps()[0];
+    }
+  } else {
+    console.warn("⚠️ Firebase configuration is incomplete. Skipping initialization. Check your environment variables.");
+  }
 }
 
 // Analytics instance cache
@@ -35,16 +44,23 @@ export const getAnalyticsInstance = async () => {
     return analyticsInstance;
   }
 
+  if (!app) {
+    return null;
+  }
+
   if (typeof window !== 'undefined') {
-    const isSupportedResult = await isSupported();
-    if (isSupportedResult) {
-      console.log("✅ Firebase Analytics is supported and has been initialized.");
-      analyticsInstance = getAnalytics(app);
-      return analyticsInstance;
+    try {
+      const isSupportedResult = await isSupported();
+      if (isSupportedResult) {
+        console.log("✅ Firebase Analytics is supported and has been initialized.");
+        analyticsInstance = getAnalytics(app);
+        return analyticsInstance;
+      }
+    } catch (err) {
+      console.error("❌ Failed to initialize Firebase Analytics:", err);
     }
   }
 
-  console.log("❌ Firebase Analytics is not supported in this environment.");
   return null;
 };
 
