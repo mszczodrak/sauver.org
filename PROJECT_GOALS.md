@@ -21,7 +21,7 @@ Sauver is a local-first, AI-powered defense layer for Gmail. It doesn't just fil
 ## Technical Details
 - **Stack:** Python, Shell, FastMCP.
 - **Integration:** Gemini CLI Extension.
-- **Installation:** `gemini extensions install https://github.com/mszczodrak/sauver --consent`
+- **Installation:** `gemini extensions install https://github.com/sauver-org/sauver --consent`
 - **Configuration:** Local `.sauver-config.json` via interactive terminal wizard.
 - **License:** MIT.
 

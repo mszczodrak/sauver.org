@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mszczodrak/sauver.org.git"
+    "url": "git+https://github.com/sauver-org/sauver.org.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mszczodrak/sauver.org/issues"
+    "url": "https://github.com/sauver-org/sauver.org/issues"
   },
-  "homepage": "https://github.com/mszczodrak/sauver.org#readme",
+  "homepage": "https://github.com/sauver-org/sauver.org#readme",
   "dependencies": {
     "clsx": "^2.1.1",
     "firebase": "^12.10.0",

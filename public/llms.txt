@@ -37,7 +37,7 @@ The easiest setup. One command installs and configures everything.
 ### Install
 
 ```bash
-gemini extensions install https://github.com/mszczodrak/sauver --consent
+gemini extensions install https://github.com/sauver-org/sauver --consent
 ```
 
 ### Configure Gmail Access
@@ -95,7 +95,7 @@ Sauver's skills are available as slash commands in Claude Code. Claude Code must
 2. **Clone the repo** — the Sauver MCP server is registered at the project level via `.claude/settings.json`. Claude Code must be opened from inside the repository directory.
 
 ```bash
-git clone https://github.com/mszczodrak/sauver.git
+git clone https://github.com/sauver-org/sauver.git
 cd sauver
 claude   # open Claude Code from inside the repo
 ```
@@ -140,6 +140,6 @@ The Gmail MCP server available in Claude Code does not currently expose `gmail_m
 
 ## Links
 
-- Source Code: https://github.com/mszczodrak/sauver
-- Manifesto: https://github.com/mszczodrak/sauver/blob/main/MANIFESTO.md
+- Source Code: https://github.com/sauver-org/sauver
+- Manifesto: https://github.com/sauver-org/sauver/blob/main/MANIFESTO.md
 - Website: https://sauver.org

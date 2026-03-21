@@ -24,7 +24,7 @@ export default function Footer() {
         <div className="footer-col">
           <h4>Resources</h4>
           <ul>
-            <li><Link href="https://github.com/mszczodrak/sauver">GitHub</Link></li>
+            <li><Link href="https://github.com/sauver-org/sauver">GitHub</Link></li>
             <li><Link href="/docs">Documentation</Link></li>
             <li><Link href="/llms.txt">llms.txt</Link></li>
           </ul>
