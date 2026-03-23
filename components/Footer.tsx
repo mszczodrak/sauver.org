@@ -25,6 +25,10 @@ export default function Footer() {
           <h4>Resources</h4>
           <ul>
             <li><Link href="https://github.com/sauver-org/sauver">GitHub</Link></li>
+            <li><Link href="https://www.youtube.com/@SauverOrg">YouTube</Link></li>
+            <li><Link href="https://bsky.app/profile/sauverorg.bsky.social">Bluesky</Link></li>
+            <li><Link href="https://www.reddit.com/user/sauverorg/">Reddit</Link></li>
+            <li><Link href="https://www.tiktok.com/@sauverorg">TikTok</Link></li>
             <li><Link href="/docs">Documentation</Link></li>
             <li><Link href="/llms.txt">llms.txt</Link></li>
           </ul>
