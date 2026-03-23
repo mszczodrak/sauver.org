@@ -19,6 +19,7 @@ export default function Footer() {
             <li><Link href="/#who-it-is-for">Who it's for</Link></li>
             <li><Link href="/#how-it-works">How it works</Link></li>
             <li><Link href="/#installation">Installation</Link></li>
+            <li><Link href="/docs">Documentation</Link></li>
           </ul>
         </div>
         <div className="footer-col">
@@ -29,7 +30,6 @@ export default function Footer() {
             <li><Link href="https://bsky.app/profile/sauverorg.bsky.social">Bluesky</Link></li>
             <li><Link href="https://www.reddit.com/user/sauverorg/">Reddit</Link></li>
             <li><Link href="https://www.tiktok.com/@sauverorg">TikTok</Link></li>
-            <li><Link href="/docs">Documentation</Link></li>
             <li><Link href="/llms.txt">llms.txt</Link></li>
           </ul>
         </div>
