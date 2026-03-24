@@ -866,8 +866,10 @@ footer {
   text-transform: uppercase; letter-spacing: 0.1em;
 }
 .footer-col ul li { margin-bottom: 12px; }
-.footer-col ul a { font-size: 14px; color: var(--text-secondary); }
+.footer-col ul a { font-size: 14px; color: var(--text-secondary); display: flex; align-items: center; gap: 10px; }
 .footer-col ul a:hover { color: var(--accent-amber); }
+.footer-col ul a svg { width: 16px; height: 16px; fill: currentColor; opacity: 0.6; transition: opacity 0.2s ease; }
+.footer-col ul a:hover svg { opacity: 1; }
 
 .footer-bottom {
   max-width: var(--container-max);
