@@ -236,7 +236,7 @@ export default function Home() {
               YOUR INBOX IS A<br /><span>SURVEILLANCE STATE.</span>
             </h2>
             <p className="reveal" ref={addToRefs}>
-              They promised us AI would unlock human potential. Instead they used it to build a slop-machine that bombards your inbox, intoxicates your feed, and taxes your sanity. They&apos;ve turned your most private tool — your email — into a playground for tracking pixels and automated predators who see your time as their raw material.
+              The attention merchants were handed AI and promised us it would save us time. Instead they used it to build a slop-machine that bombards your inbox and taxes your sanity. They&apos;ve turned your most private tool — your email — into surveillance infrastructure for automated predators who see your time as raw material.
             </p>
             <p className="reveal problem-manifesto-close" ref={addToRefs}>
               It is not your fault. <strong>No human was ever meant to compete with a thousand bots.</strong>
@@ -252,11 +252,11 @@ export default function Home() {
           </div>
           <div className="manifesto-grid">
             {[
-              { n: '01', text: 'Your attention is being harvested. They used AI to build a slop-machine that bombards your inbox and taxes your sanity.' },
-              { n: '02', text: 'No human was ever meant to compete with a thousand bots firing at them simultaneously. The system isn\'t broken — it\'s working exactly as they intended.' },
-              { n: '03', text: 'We confirm what you\'ve always suspected: that "personalized" pitch was written by a machine, and that hidden pixel is watching you.' },
-              { n: '04', text: 'We use AI to stop AI. We mirror their tactics and waste the time of those who dare to waste yours.' },
-              { n: '05', text: 'We are reclaiming the quiet required for deep work, the privacy required for freedom. The rescue has begun.' },
+              { n: '01', text: 'The attention merchants — lead generators, growth hackers, and their armies of automated tools — were handed AI and used it to build a slop-machine that bombards your inbox and taxes your sanity.' },
+              { n: '02', text: 'No human was ever meant to compete with a thousand bots firing at them simultaneously. The system isn\'t broken. It\'s working exactly as they intended.' },
+              { n: '03', text: 'We confirm what you\'ve always suspected: that "personalized" pitch was written by a machine, and that hidden pixel is watching you. We make your defense active.' },
+              { n: '04', text: 'None of us are fighting alone. Every trap deployed, every pixel stripped, every bouncer reply sent — by any of us — drains their resources. Our collective resistance is a DDoS against the attention economy.' },
+              { n: '05', text: 'People like us don\'t accept the default. We fight back. Together we overwhelm them.' },
             ].map((item) => (
               <div key={item.n} className="manifesto-item reveal" ref={addToRefs}>
                 <span className="manifesto-n mono">{item.n}</span>
