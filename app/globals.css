@@ -761,18 +761,8 @@ nav.scrolled {
 .example-intro code { font-size: 0.92em; }
 
 .example-terminal { max-width: 100%; }
-.example-terminal .terminal-body-static {
-  max-height: none;
-  overflow: visible;
-  padding: 20px 24px;
-}
-
-.example-commands { margin-top: 40px; }
-.example-commands-label {
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  color: var(--text-secondary);
-  margin-bottom: 16px;
+.example-terminal .terminal-body {
+  height: 520px;
 }
 
 code {

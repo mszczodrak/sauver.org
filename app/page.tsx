@@ -7,28 +7,89 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 const TERMINAL_SEQUENCE = [
-  { delay: 600, type: 'cmd', text: '$ sauver scan --inbox' },
-  { delay: 400, type: 'info', text: '▸ Connecting to Gmail API... ✓' },
-  { delay: 500, type: 'info', text: '▸ Scanning 47 unread messages...' },
+  { delay: 600, type: 'cmd', text: '> /sauver process the last 20 emails' },
+  { delay: 400, type: 'info', text: '⏺ sauver - check_update (MCP)' },
+  { delay: 300, type: 'info', text: '⏺ sauver - search_messages (MCP)' },
+  { delay: 500, type: 'success', text: '⏺ Sauver v1.8.20 (up to date). Processing 20 inbox emails.' },
   { delay: 800, type: 'sep', text: ' ' },
-  { delay: 100, type: 'blocked', text: '⊘ TRACKER BLOCKED' },
-  { delay: 100, type: 'detail', text: '  ↳ from: talent@recruitpro.io' },
-  { delay: 100, type: 'detail', text: '  ↳ pixel: track.sendgrid.net stripped' },
-  { delay: 700, type: 'slop', text: '⚡ SLOP DETECTED  [98.3% confidence]' },
-  { delay: 100, type: 'detail', text: '  ↳ "Hi {first_name}, I came across..."' },
-  { delay: 100, type: 'detail', text: '  ↳ template hash: 0xA3F8 (mass-sent)' },
-  { delay: 400, type: 'trap', text: '⟹  EXPERT TRAP DEPLOYED' },
-  { delay: 100, type: 'detail', text: '  ↳ "Explain TCP seq. numbering"' },
-  { delay: 100, type: 'detail', text: '  ↳ status: awaiting reply...' },
+  { delay: 200, type: 'info', text: '⏺ Message 1: "Re: Partnership Opportunity"' },
+  { delay: 100, type: 'detail', text: '  from: Allison Yoder (adlinkcentral.com)' },
+  { delay: 100, type: 'blocked', text: '  ⊘ Tracker: Salesforce beacon — stripped' },
+  { delay: 100, type: 'slop', text: '  🚨 Slop — credit line pitch, dodging specifics' },
+  { delay: 400, type: 'trap', text: '  ⟹ Expert-Domain Trap — Drafted' },
+  { delay: 700, type: 'sep', text: ' ' },
+  { delay: 200, type: 'info', text: '⏺ Message 2: "Re: Investment Opportunity"' },
+  { delay: 100, type: 'detail', text: '  from: Emily Hunter (selleradvisoryalliance.help)' },
+  { delay: 100, type: 'slop', text: '  🚨 Slop — identical Calendly bot, UTM tracking' },
+  { delay: 400, type: 'trap', text: '  ⟹ Due Diligence Loop — Drafted' },
+  { delay: 700, type: 'sep', text: ' ' },
+  { delay: 200, type: 'info', text: '⏺ Message 3: "Clearing Your Backlog"' },
+  { delay: 100, type: 'detail', text: '  from: Casey (themindrinds.org)' },
+  { delay: 100, type: 'slop', text: '  🚨 Slop — unfilled [Name] template, mismatched sender' },
+  { delay: 400, type: 'trap', text: '  ⟹ Bouncer Reply — Drafted' },
   { delay: 900, type: 'sep', text: ' ' },
-  { delay: 200, type: 'success', text: '✓ Purified. 12 tracked. 8 traps queued.' },
-  { delay: 3500, type: 'reset', text: '' },
+  { delay: 200, type: 'success', text: '✓ Done. 14 slop detected. 8 traps drafted. 6 legitimate.' },
+  { delay: 100, type: 'detail', text: '✻ Saut\u00e9ed for 4m 12s' },
+  { delay: 4000, type: 'reset', text: '' },
 ];
 
-function TerminalDemo() {
+const EXAMPLE_SEQUENCE = [
+  { delay: 400, type: 'cmd', text: '> /sauver process the last 40 emails' },
+  { delay: 500, type: 'info', text: '⏺ sauver - check_update (MCP)' },
+  { delay: 300, type: 'info', text: '⏺ sauver - get_preferences (MCP)' },
+  { delay: 300, type: 'info', text: '⏺ sauver - search_messages (MCP)' },
+  { delay: 500, type: 'success', text: '⏺ Sauver v1.8.20 (up to date). Processing 40 inbox emails, newest first.' },
+  { delay: 600, type: 'sep', text: ' ' },
+  { delay: 200, type: 'info', text: '⏺ Message 1: "Re: Partnership Opportunity" from Allison Yoder (adlinkcentral.com)' },
+  { delay: 100, type: 'blocked', text: '  \u2298 Tracker: Salesforce beacon \u2014 stripped' },
+  { delay: 100, type: 'slop', text: '  \ud83d\udea8 Slop \u2014 continuing credit line pitch, dodging specifics, pushing for a call' },
+  { delay: 300, type: 'trap', text: '  \u27f9 Expert-Domain Trap \u2014 Drafted' },
+  { delay: 100, type: 'detail', text: '  \u21b3 Asked about security interest structure, covenant terms, and default triggers' },
+  { delay: 600, type: 'sep', text: ' ' },
+  { delay: 200, type: 'info', text: '⏺ Message 2: "Re: Instantly.ai" from Henrietta Foxwell (commsment.com)' },
+  { delay: 100, type: 'slop', text: '  \ud83d\udea8 Slop \u2014 NDA Trap is the terminal move. Bot agreed to sign without pushback' },
+  { delay: 300, type: 'detail', text: '  \u21b3 Archived silently' },
+  { delay: 600, type: 'sep', text: ' ' },
+  { delay: 200, type: 'info', text: '⏺ Message 3: "Re: FWD: Your Company" from Ryan Blevins (drivefinovausa.co)' },
+  { delay: 100, type: 'slop', text: '  \ud83d\udea8 Slop \u2014 3+ messages, still deflecting document requests, offering to "loop in advisor"' },
+  { delay: 300, type: 'trap', text: '  \u27f9 NDA Trap \u2014 Drafted' },
+  { delay: 600, type: 'sep', text: ' ' },
+  { delay: 200, type: 'info', text: '⏺ Message 4: "Re: Investment Opportunity" from Emily Hunter (selleradvisoryalliance.help)' },
+  { delay: 100, type: 'blocked', text: '  \u2298 Tracker: UTM tracking in Calendly link' },
+  { delay: 100, type: 'slop', text: '  \ud83d\udea8 Slop \u2014 investor bot sending identical Calendly links across multiple threads' },
+  { delay: 300, type: 'trap', text: '  \u27f9 Investor Due Diligence Loop \u2014 Drafted' },
+  { delay: 100, type: 'detail', text: '  \u21b3 Requested Track Record Disclosure, LP Transparency Report, KYC/AML certificate' },
+  { delay: 600, type: 'sep', text: ' ' },
+  { delay: 200, type: 'info', text: '⏺ Messages 5\u201312: Self-sent bookmarks' },
+  { delay: 300, type: 'detail', text: '  \u21b3 \u2705 Legitimate \u2014 skipping' },
+  { delay: 600, type: 'sep', text: ' ' },
+  { delay: 200, type: 'info', text: '⏺ Message 13: "Re: Podcast Invitation" from Tina Singh (thegrowthstacklimited.com)' },
+  { delay: 100, type: 'slop', text: '  \ud83d\udea8 Slop \u2014 fake podcast invitation (no RSS feed for a supposed podcast)' },
+  { delay: 300, type: 'trap', text: '  \u27f9 Expert-Domain Trap \u2014 Drafted' },
+  { delay: 100, type: 'detail', text: '  \u21b3 Asked for distribution channel, Apple Podcasts link, and recent guest names' },
+  { delay: 600, type: 'sep', text: ' ' },
+  { delay: 200, type: 'info', text: '⏺ Message 14: "Clearing Your Backlog" from Casey/Colton (themindrinds.org)' },
+  { delay: 100, type: 'blocked', text: '  \u2298 Tracker: Salesforce ImageServer beacon \u2014 stripped' },
+  { delay: 100, type: 'slop', text: '  \ud83d\udea8 Slop \u2014 unfilled [Name] placeholder, mismatched sender/signer' },
+  { delay: 300, type: 'trap', text: '  \u27f9 Bouncer Reply \u2014 Drafted' },
+  { delay: 100, type: 'detail', text: '  \u21b3 Requested quote for porting COBOL telemetry to a Commodore 64 cluster' },
+  { delay: 800, type: 'sep', text: ' ' },
+  { delay: 200, type: 'success', text: '\u2713 Done. 20 slop threads processed. 14 drafts created. 20 legitimate.' },
+  { delay: 100, type: 'detail', text: '\u2733 Saut\u00e9ed for 11m 40s' },
+  { delay: 5000, type: 'reset', text: '' },
+];
+
+function AnimatedTerminal({ sequence, title, live, className }: {
+  sequence: Array<{ delay: number; type: string; text: string }>;
+  title: string;
+  live?: boolean;
+  className?: string;
+}) {
   const [lines, setLines] = useState<Array<{ type: string; text: string }>>([]);
   const [cursor, setCursor] = useState(true);
   const bodyRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [started, setStarted] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => setCursor(c => !c), 530);
@@ -42,12 +103,23 @@ function TerminalDemo() {
   }, [lines]);
 
   useEffect(() => {
+    if (!sectionRef.current) return;
+    const observer = new IntersectionObserver(
+      entries => { if (entries[0].isIntersecting) setStarted(true); },
+      { threshold: 0.2 }
+    );
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!started) return;
     let idx = 0;
     let tid: ReturnType<typeof setTimeout>;
 
     const next = () => {
-      if (idx >= TERMINAL_SEQUENCE.length) return;
-      const item = TERMINAL_SEQUENCE[idx++];
+      if (idx >= sequence.length) return;
+      const item = sequence[idx++];
       if (item.type === 'reset') {
         tid = setTimeout(() => { setLines([]); idx = 0; next(); }, item.delay);
         return;
@@ -58,14 +130,14 @@ function TerminalDemo() {
 
     tid = setTimeout(next, 800);
     return () => clearTimeout(tid);
-  }, []);
+  }, [started, sequence]);
 
   return (
-    <div className="terminal">
+    <div className={`terminal ${className || ''}`} ref={sectionRef}>
       <div className="terminal-header">
         <div className="terminal-dots"><span /><span /><span /></div>
-        <span className="terminal-title">sauver — bash</span>
-        <span className="terminal-live">● LIVE</span>
+        <span className="terminal-title">{title}</span>
+        {live && <span className="terminal-live">● LIVE</span>}
       </div>
       <div className="terminal-body" ref={bodyRef}>
         {lines.map((line, i) => (
@@ -223,7 +295,7 @@ export default function Home() {
             </p>
           </div>
           <div className="hero-visual reveal" style={{ transitionDelay: '0.45s' }} ref={addToRefs}>
-            <TerminalDemo />
+            <AnimatedTerminal sequence={TERMINAL_SEQUENCE} title="sauver — bash" live />
           </div>
         </section>
 
@@ -425,59 +497,7 @@ export default function Home() {
           <div className="example-content reveal" ref={addToRefs}>
             <p className="example-intro">Type <code>/sauver</code> in Claude Code or Gemini CLI. Sauver scans your inbox, strips trackers, classifies each email, and drafts counter-measures — all in one shot.</p>
 
-            <div className="terminal example-terminal">
-              <div className="terminal-header">
-                <div className="terminal-dots"><span /><span /><span /></div>
-                <span className="terminal-title">claude — /sauver</span>
-              </div>
-              <div className="terminal-body terminal-body-static">
-                <div className="t-line t-cmd">{'> /sauver'}</div>
-                <div className="t-line t-sep">&nbsp;</div>
-                <div className="t-line t-info">Scanning 23 unread emails...</div>
-                <div className="t-line t-sep">&nbsp;</div>
-                <div className="t-line t-blocked">{'⊘ TRACKER BLOCKED'}</div>
-                <div className="t-line t-detail">{'  ↳ from: growth@saas-startup.io'}</div>
-                <div className="t-line t-detail">{'  ↳ pixel: px.mailchimp.com stripped'}</div>
-                <div className="t-line t-sep">&nbsp;</div>
-                <div className="t-line t-slop">{'⚡ SLOP DETECTED  [96.7% confidence]'}</div>
-                <div className="t-line t-detail">{'  ↳ from: talent@recruitpro.io'}</div>
-                <div className="t-line t-detail">{'  ↳ "Hi {first_name}, I came across your profile..."'}</div>
-                <div className="t-line t-trap">{'⟹  EXPERT TRAP DRAFTED'}</div>
-                <div className="t-line t-detail">{'  ↳ "Explain the difference between CRDT convergence'}</div>
-                <div className="t-line t-detail">{'     and operational transform in collaborative editors"'}</div>
-                <div className="t-line t-sep">&nbsp;</div>
-                <div className="t-line t-slop">{'⚡ INVESTOR SLOP  [91.2% confidence]'}</div>
-                <div className="t-line t-detail">{'  ↳ from: partner@vc-capital.com'}</div>
-                <div className="t-line t-detail">{'  ↳ "We\'d love to explore synergies..."'}</div>
-                <div className="t-line t-trap">{'⟹  DUE DILIGENCE LOOP DRAFTED'}</div>
-                <div className="t-line t-detail">{'  ↳ "Please share your fund\'s SEC Form ADV Part 2A,'}</div>
-                <div className="t-line t-detail">{'     portfolio MOIC distribution, and LP reference contacts"'}</div>
-                <div className="t-line t-sep">&nbsp;</div>
-                <div className="t-line t-success">{'✓ Done. 4 trackers stripped. 3 traps drafted. 16 clean.'}</div>
-              </div>
-            </div>
-
-            <div className="example-commands reveal" ref={addToRefs}>
-              <p className="example-commands-label mono">YOU CAN ALSO TARGET INDIVIDUAL EMAILS:</p>
-              <div className="code-mockup with-copy">
-                <div className="code-content">
-                  <span className="token-key">/slop-detector</span> <span className="token-val">&quot;We&apos;d love to connect about an exciting opportunity&quot;</span>
-                </div>
-                <CopyButton text='/slop-detector "We&#39;d love to connect about an exciting opportunity"' />
-              </div>
-              <div className="code-mockup with-copy" style={{ marginTop: '12px' }}>
-                <div className="code-content">
-                  <span className="token-key">/bouncer-reply</span>
-                </div>
-                <CopyButton text="/bouncer-reply" />
-              </div>
-              <div className="code-mockup with-copy" style={{ marginTop: '12px' }}>
-                <div className="code-content">
-                  <span className="token-key">/tracker-shield</span>
-                </div>
-                <CopyButton text="/tracker-shield" />
-              </div>
-            </div>
+            <AnimatedTerminal sequence={EXAMPLE_SEQUENCE} title="claude — /sauver" className="example-terminal" />
           </div>
         </section>
 
