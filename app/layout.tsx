@@ -3,8 +3,30 @@ import FirebaseAnalyticsInit from "@/components/FirebaseAnalyticsInit";
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'SAUVER | The Digital Bouncer for your Inbox',
+  title: 'SAUVER | The anti AI-slop movement',
   description: 'Reclaim your attention with Sauver, the anti AI-slop movement. We neutralize surveillance metadata and deploy active traps to make automated spammers pay.',
+  openGraph: {
+    title: 'Sauver: The anti AI-slop movement',
+    description: 'Reclaim your attention with Sauver, the anti AI-slop movement. We neutralize surveillance metadata and deploy active traps to make automated spammers pay.',
+    url: 'https://sauver.org',
+    siteName: 'Sauver',
+    images: [
+      {
+        url: '/sauver-shield-simple-color.png',
+        width: 1200,
+        height: 630,
+        alt: 'Sauver — Anti AI-slop movement',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Sauver: The anti AI-slop movement',
+    description: 'Reclaim your attention with Sauver, the anti AI-slop movement. We neutralize surveillance metadata and deploy active traps to make automated spammers pay.',
+    images: ['/sauver-shield-simple-color.png'],
+  },
   icons: {
     icon: '/favicon.ico',
     apple: '/apple-touch-icon.png',
