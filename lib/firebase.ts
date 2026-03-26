@@ -12,8 +12,8 @@ if (getApps().length === 0) {
     // 1. Firebase App Hosting Automatic Initialization
     app = initializeApp();
     console.log("🔥 Initialized Firebase with App Hosting automatic configuration.");
-  } catch (err) {
-    // Instead of throwing, we warn. This allows the build to proceed even if 
+  } catch {
+    // Instead of throwing, we warn. This allows the build to proceed even if
     // automatic initialization is not available (e.g., in local development without full setup).
     console.warn("⚠️ Firebase automatic initialization failed. This is expected if not running in Firebase App Hosting.");
   }
