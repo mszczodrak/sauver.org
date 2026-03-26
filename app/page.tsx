@@ -213,7 +213,7 @@ export default function Home() {
               <span>WE WEAPONIZED IT BACK.</span>
             </h1>
             <p className="reveal" style={{ transitionDelay: '0.4s' }} ref={addToRefs}>
-              The slop machine sends billions of AI-generated emails every day. Each one is a system deciding your time is worth nothing. Sauver fights back — stripping trackers, exposing slop, and deploying traps that make senders pay for the intrusion. Free. Local-first. MIT licensed. <strong>Built for The Resistance.</strong>
+              The slop machine sends billions of AI-generated emails every day. Each one is a system deciding your time is worth nothing. Sauver fights back — stripping trackers, exposing slop, and deploying traps that make senders pay for the intrusion. <strong>Built for The Resistance.</strong>
             </p>
             <div className="hero-btns reveal" style={{ transitionDelay: '0.55s' }} ref={addToRefs}>
               <Link href="#installation" className="btn btn-cta">Join The Resistance &rarr;</Link>
