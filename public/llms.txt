@@ -1,6 +1,6 @@
 # Sauver
 
-> The Digital Bouncer for your Inbox. A local-first, AI-powered Gmail defense layer that neutralizes surveillance and strikes back at automated outreach.
+> Reclaim your attention with Sauver, the anti AI-slop movement. We neutralize surveillance metadata and deploy active traps to make automated spammers pay.
 
 Sauver is a set of specialized skills for Gemini CLI and Claude Code that integrates with Gmail to perform automated inbox triage and active defense. It doesn't just filter spam — it fights back.
 

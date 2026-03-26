@@ -213,7 +213,7 @@ export default function Home() {
               <span>WE WEAPONIZED IT BACK.</span>
             </h1>
             <p className="reveal" style={{ transitionDelay: '0.4s' }} ref={addToRefs}>
-              The slop machine sends billions of AI-generated emails every day. Each one is a system deciding your time is worth nothing. Sauver fights back by stripping trackers, exposing slop, and deploying traps that make senders pay for the intrusion. <strong>Built for The Resistance.</strong>
+              Reclaim your attention with Sauver, the anti AI-slop movement. We neutralize surveillance metadata and deploy active traps to make automated spammers pay. Join the resistance and flip the script on automated predators. <strong>Built for the individual.</strong>
             </p>
             <div className="hero-btns reveal" style={{ transitionDelay: '0.55s' }} ref={addToRefs}>
               <Link href="#installation" className="btn btn-cta">Join The Resistance &rarr;</Link>

@@ -4,7 +4,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'SAUVER | The Digital Bouncer for your Inbox',
-  description: 'The Digital Bouncer for your Inbox',
+  description: 'Reclaim your attention with Sauver, the anti AI-slop movement. We neutralize surveillance metadata and deploy active traps to make automated spammers pay.',
   icons: {
     icon: '/favicon.ico',
     apple: '/apple-touch-icon.png',
