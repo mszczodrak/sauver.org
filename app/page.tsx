@@ -580,7 +580,8 @@ export default function Home() {
               )}
 
               <p className="micro-copy mono">
-                We build tools to destroy spam. We aren&apos;t going to send you any. 100% slop-free.
+                We build tools to destroy spam. We aren&apos;t going to send you any. 100% slop-free.<br />
+                By joining, you agree to our <Link href="/privacy">Privacy Policy</Link>.
               </p>
             </form>
           </div>

@@ -838,6 +838,12 @@ nav.scrolled {
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
+.micro-copy a {
+  color: var(--text-dim);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.micro-copy a:hover { color: var(--text-secondary); }
 
 .subscribe-success {
   color: var(--status-safe);
