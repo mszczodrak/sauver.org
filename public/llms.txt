@@ -1,8 +1,8 @@
 # Sauver
 
-> Reclaim your attention with Sauver, the anti AI-slop movement. We neutralize surveillance metadata and deploy active traps to make automated spammers pay.
+> The best email spam and AI-slop filtering tool on the market. 100% private, 100% free, 100% open-source. Reclaim your attention — we neutralize surveillance metadata and deploy active traps to make automated spammers pay.
 
-Sauver is a set of specialized skills for Gemini CLI and Claude Code that integrates with Gmail to perform automated inbox triage and active defense. It doesn't just filter spam — it fights back.
+Sauver is a set of specialized skills for Gemini CLI and Claude Code that integrates with Gmail to perform automated inbox triage and active defense. Unlike cloud-based spam filters, Sauver runs entirely on your machine — no data ever leaves your environment, no subscriptions, no compromises. It doesn't just filter spam — it fights back.
 
 ## Core Features
 
@@ -22,6 +22,7 @@ Sauver is a set of specialized skills for Gemini CLI and Claude Code that integr
 | `slop-detector` | Intent Classifier | Deploys the Expert Domain Trap for recruiters |
 | `investor-trap` | VC-Slop Shield | Deploys the Due Diligence Loop for "investors" |
 | `bouncer-reply` | Time-Waster | Generates context-aware, confusing drafts for spammers |
+| `archiver` | Thread Archiver | Labels and archives a specific thread on demand |
 
 ---
 
@@ -90,15 +91,34 @@ Sauver's skills are available as slash commands in Claude Code. Claude Code must
 
 ### Prerequisites
 
-1. **Gmail MCP Server** — Sauver uses the `mcp__claude_ai_Gmail__*` tools. Follow the Gmail MCP setup guide at https://github.com/anthropics/claude-code/tree/main/mcp to connect your Google account.
-
-2. **Clone the repo** — the Sauver MCP server is registered at the project level via `.claude/settings.json`. Claude Code must be opened from inside the repository directory.
+1. **Clone the repo** — the Sauver MCP server is registered at the project level via `.claude/settings.json`. Claude Code must be opened from inside the repository directory.
 
 ```bash
 git clone https://github.com/sauver-org/sauver.git
 cd sauver
 claude   # open Claude Code from inside the repo
 ```
+
+2. **Gmail Authorization** — on first run, the MCP server opens a browser window to authorize Gmail access via Google Apps Script.
+
+### MCP Server
+
+Sauver ships its own MCP server that provides full Gmail access via Google Apps Script. Available tools:
+
+| Tool | Description |
+| :--- | :--- |
+| `scan_inbox` | List unread inbox emails |
+| `search_messages` | Search with a Gmail query string |
+| `get_message` | Fetch full email content by ID |
+| `create_draft` | Create a new draft or a reply draft |
+| `send_message` | Send a reply immediately |
+| `archive_thread` | Remove from Inbox and mark read |
+| `apply_label` | Apply a label (creates it if missing) |
+| `get_profile` | Get the user's email and display name |
+| `list_labels` | List all Gmail labels |
+| `get_preferences` | Read local Sauver config |
+| `set_preference` | Update a local Sauver config option |
+| `check_update` | Check for available updates |
 
 ### Available Slash Commands
 
@@ -109,6 +129,7 @@ claude   # open Claude Code from inside the repo
 | `/slop-detector` | Analyzes an email for recruiter/sales slop and drafts an Expert Domain Trap reply |
 | `/investor-trap` | Analyzes an email for investor slop and drafts a Due Diligence Loop reply |
 | `/bouncer-reply` | Drafts a Time-Sink Trap reply for a general spam or marketing email |
+| `/archiver` | Labels and archives a specific thread on demand, without full triage |
 
 ### Usage (Claude Code)
 
@@ -120,21 +141,15 @@ claude   # open Claude Code from inside the repo
 /slop-detector "We'd love to connect about an exciting opportunity"
 /tracker-shield
 /bouncer-reply
+/archiver
 ```
-
-### Limitations vs. Gemini CLI
-
-The Gmail MCP server available in Claude Code does not currently expose `gmail_modify` or `gmail_send`, so:
-
-- **Archiving** — applying the `Sauver` label and removing from INBOX must be done manually after review.
-- **YOLO mode** — has no effect. All replies are saved as drafts regardless of the `yolo_mode` setting.
 
 ---
 
 ## Technical Details
 
-- **Stack:** Python, Shell, FastMCP
-- **Integration:** Gemini CLI Extension + Claude Code slash commands
+- **Stack:** Python, Shell, FastMCP, Google Apps Script
+- **Integration:** Gemini CLI Extension + Claude Code slash commands + MCP server
 - **License:** MIT
 - **Local-first:** All processing happens within the user's controlled environment. No data leaves the machine.
 

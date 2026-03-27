@@ -3,6 +3,7 @@ import FirebaseAnalyticsInit from "@/components/FirebaseAnalyticsInit";
 import './globals.css'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://sauver.org'),
   title: 'SAUVER | The anti AI-slop movement',
   description: 'Reclaim your attention with Sauver, the anti AI-slop movement. We neutralize surveillance metadata and deploy active traps to make automated spammers pay.',
   openGraph: {
@@ -12,8 +13,8 @@ export const metadata: Metadata = {
     siteName: 'Sauver',
     images: [
       {
-        url: '/sauver-shield-simple-color.png',
-        width: 1200,
+        url: '/og-image.jpg',
+        width: 1264,
         height: 630,
         alt: 'Sauver — Anti AI-slop movement',
       },
@@ -25,10 +26,20 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Sauver: The anti AI-slop movement',
     description: 'Reclaim your attention with Sauver, the anti AI-slop movement. We neutralize surveillance metadata and deploy active traps to make automated spammers pay.',
-    images: ['/sauver-shield-simple-color.png'],
+    creator: '@mszczodrak',
+    images: [
+      {
+        url: '/og-image.jpg',
+        alt: 'Sauver — Anti AI-slop movement',
+      },
+    ],
   },
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
     apple: '/apple-touch-icon.png',
   },
 }
@@ -41,10 +52,6 @@ export default function RootLayout({
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
