@@ -158,3 +158,4 @@ Sauver ships its own MCP server that provides full Gmail access via Google Apps 
 - Source Code: https://github.com/sauver-org/sauver
 - Manifesto: https://github.com/sauver-org/sauver/blob/main/MANIFESTO.md
 - Website: https://sauver.org
+- Instagram: https://www.instagram.com/sauverorg/
