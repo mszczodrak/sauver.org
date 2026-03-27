@@ -760,6 +760,10 @@ nav.scrolled {
 .install-detail-link a:hover { text-decoration: underline; }
 
 /* ── Email Capture Form ───────────────────────── */
+#stay-in-the-loop {
+  padding-top: 40px;
+}
+
 .newsletter-wrapper {
   max-width: 700px;
   margin: 0 auto;
