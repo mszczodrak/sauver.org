@@ -567,8 +567,14 @@ export default function Home() {
                 </button>
               </div>
 
+              {subscribeStatus === 'success' && (
+                <p className="subscribe-success">
+                  You&apos;re in. We&apos;ll only ping you when it matters.
+                </p>
+              )}
+
               {subscribeStatus === 'error' && (
-                <p style={{ color: 'var(--status-danger)', fontSize: '0.9rem', marginTop: '0.5rem' }}>
+                <p style={{ color: 'var(--status-danger)', fontSize: '14px', marginTop: '0.5rem' }}>
                   Connection failed. Try again.
                 </p>
               )}

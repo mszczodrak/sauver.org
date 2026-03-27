@@ -835,9 +835,18 @@ nav.scrolled {
   letter-spacing: 0.08em;
 }
 
+.subscribe-success {
+  color: var(--status-safe);
+  font-size: 14px;
+  margin-top: 0.5rem;
+}
+
 @media (max-width: 600px) {
   .form-input-group {
     flex-direction: column;
+  }
+  .form-input-group .btn-cta {
+    width: 100%;
   }
   .newsletter-wrapper {
     padding: 2.5rem 1.25rem;
