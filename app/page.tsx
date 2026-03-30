@@ -314,14 +314,14 @@ export default function Home() {
               [ THE RESISTANCE IS ACTIVE ]
             </div>
             <h1 className="reveal" style={{ transitionDelay: '0.25s' }} ref={addToRefs}>
-              TAKE BACK YOUR INBOX.<br />
+              KEEP AI SLOP OUT OF YOUR INBOX.<br />
               <span>LET THE SPAMMERS WASTE THEIR TIME.</span>
             </h1>
             <p className="hero-desc reveal" style={{ transitionDelay: '0.4s' }} ref={addToRefs}>
               AI made it effortless to flood your inbox with slop. <br className="desktop-br" />
               We made it effortless to fight back. <br className="desktop-br" />
               Stop the slop. Watch the spammers scream into the abyss. <br />
-              <strong>Join the resistance.</strong>
+              <strong>Join the anti-AI-slop resistance.</strong>
             </p>
             <div className="hero-btns reveal" style={{ transitionDelay: '0.55s' }} ref={addToRefs}>
               <Link href="#installation" className="btn btn-cta">Join The Resistance &rarr;</Link>
