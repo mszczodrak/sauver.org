@@ -1,6 +1,6 @@
-# Sauver
+# Sauver — The anti-ai-slop movement
 
-> The best email spam and AI-slop filtering tool on the market. 100% private, 100% free, 100% open-source. Reclaim your attention — we neutralize surveillance metadata and deploy active traps to make automated spammers pay.
+> The best email spam and anti-ai-slop filtering tool on the market. 100% private, 100% free, 100% open-source. Reclaim your attention with Sauver, the anti-ai-slop movement. We neutralize surveillance metadata and deploy active traps to make automated spammers pay.
 
 Sauver is a set of specialized skills for Gemini CLI and Claude Code that integrates with Gmail to perform automated inbox triage and active defense. Unlike cloud-based spam filters, Sauver runs entirely on your machine — no data ever leaves your environment, no subscriptions, no compromises. It doesn't just filter spam — it fights back.
 
