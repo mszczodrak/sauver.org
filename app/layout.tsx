@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     siteName: 'Sauver',
     images: [
       {
-        url: '/og-image.jpg',
+        url: 'https://sauver.org/og-image.jpg',
         width: 1264,
         height: 630,
         alt: 'Sauver — Anti AI-slop movement',
@@ -27,12 +27,7 @@ export const metadata: Metadata = {
     title: 'Sauver: The anti AI-slop movement',
     description: 'Reclaim your attention with Sauver, the anti AI-slop movement. We neutralize surveillance metadata and deploy active traps to make automated spammers pay.',
     creator: '@mszczodrak',
-    images: [
-      {
-        url: '/og-image.jpg',
-        alt: 'Sauver — Anti AI-slop movement',
-      },
-    ],
+    images: ['https://sauver.org/og-image.jpg'],
   },
   icons: {
     icon: [
