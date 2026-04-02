@@ -4,11 +4,11 @@ import './globals.css'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://sauver.org'),
-  title: 'SAUVER | The anti AI-slop movement',
-  description: 'Reclaim your attention with Sauver, the anti AI-slop movement. We neutralize surveillance metadata and deploy active traps to make automated spammers pay.',
+  title: 'SAUVER | The anti AI-slop resistance',
+  description: 'Reclaim your attention with Sauver, the anti AI-slop resistance. We neutralize surveillance metadata and deploy active traps to make automated spammers pay.',
   openGraph: {
-    title: 'Sauver: The anti AI-slop movement',
-    description: 'Reclaim your attention with Sauver, the anti AI-slop movement. We neutralize surveillance metadata and deploy active traps to make automated spammers pay.',
+    title: 'Sauver: The anti AI-slop resistance',
+    description: 'Reclaim your attention with Sauver, the anti AI-slop resistance. We neutralize surveillance metadata and deploy active traps to make automated spammers pay.',
     url: 'https://sauver.org',
     siteName: 'Sauver',
     images: [
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
         url: 'https://sauver.org/og-image.jpg',
         width: 1264,
         height: 630,
-        alt: 'Sauver — Anti AI-slop movement',
+        alt: 'Sauver — Anti AI-slop resistance',
       },
     ],
     locale: 'en_US',
@@ -24,8 +24,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Sauver: The anti AI-slop movement',
-    description: 'Reclaim your attention with Sauver, the anti AI-slop movement. We neutralize surveillance metadata and deploy active traps to make automated spammers pay.',
+    title: 'Sauver: The anti AI-slop resistance',
+    description: 'Reclaim your attention with Sauver, the anti AI-slop resistance. We neutralize surveillance metadata and deploy active traps to make automated spammers pay.',
     creator: '@mszczodrak',
     images: ['https://sauver.org/og-image.jpg'],
   },
