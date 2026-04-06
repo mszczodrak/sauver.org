@@ -1,12 +1,12 @@
 // This file initializes the Firebase Client SDK.
-// The 'client-only' package ensures this file is never accidentally imported 
+// The 'client-only' package ensures this file is never accidentally imported
 // into a Server Component, which would cause SSR hydration issues or bundle bloat.
 import 'client-only';
 
-import { initializeApp, getApps, FirebaseApp } from "firebase/app";
-import { getAnalytics, isSupported, Analytics } from "firebase/analytics";
-import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
-import { getFirestore, Firestore } from "firebase/firestore";
+import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
+import { getAnalytics, isSupported, Analytics } from 'firebase/analytics';
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
+import { getFirestore, Firestore } from 'firebase/firestore';
 
 // Initialize or get the Firebase app
 let app: FirebaseApp | undefined;
@@ -16,11 +16,13 @@ if (getApps().length === 0) {
   try {
     // 1. Firebase App Hosting Automatic Initialization
     app = initializeApp();
-    console.log("🔥 Initialized Firebase with App Hosting automatic configuration.");
+    console.log('🔥 Initialized Firebase with App Hosting automatic configuration.');
   } catch {
     // Instead of throwing, we warn. This allows the build to proceed even if
     // automatic initialization is not available (e.g., in local development without full setup).
-    console.warn("⚠️ Firebase automatic initialization failed. This is expected if not running in Firebase App Hosting.");
+    console.warn(
+      '⚠️ Firebase automatic initialization failed. This is expected if not running in Firebase App Hosting.',
+    );
   }
 } else {
   // Reuse existing app instance (for hot-reloading)
@@ -38,7 +40,9 @@ if (typeof window !== 'undefined' && app) {
   const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
   if (!RECAPTCHA_SITE_KEY) {
-    console.warn("⚠️ NEXT_PUBLIC_RECAPTCHA_SITE_KEY is not defined. Firebase App Check will not be initialized.");
+    console.warn(
+      '⚠️ NEXT_PUBLIC_RECAPTCHA_SITE_KEY is not defined. Firebase App Check will not be initialized.',
+    );
   } else {
     if (process.env.NODE_ENV !== 'production' && typeof self !== 'undefined') {
       // Enable the App Check debug token in local development
@@ -48,11 +52,11 @@ if (typeof window !== 'undefined' && app) {
     try {
       initializeAppCheck(app, {
         provider: new ReCaptchaV3Provider(RECAPTCHA_SITE_KEY),
-        isTokenAutoRefreshEnabled: true
+        isTokenAutoRefreshEnabled: true,
       });
-      console.log("🛡️ Firebase App Check initialized.");
+      console.log('🛡️ Firebase App Check initialized.');
     } catch (err) {
-      console.error("❌ Failed to initialize Firebase App Check:", err);
+      console.error('❌ Failed to initialize Firebase App Check:', err);
     }
   }
 }
@@ -74,12 +78,12 @@ export const getAnalyticsInstance = async () => {
     try {
       const isSupportedResult = await isSupported();
       if (isSupportedResult) {
-        console.log("✅ Firebase Analytics is supported and has been initialized.");
+        console.log('✅ Firebase Analytics is supported and has been initialized.');
         analyticsInstance = getAnalytics(app);
         return analyticsInstance;
       }
     } catch (err) {
-      console.error("❌ Failed to initialize Firebase Analytics:", err);
+      console.error('❌ Failed to initialize Firebase Analytics:', err);
     }
   }
 

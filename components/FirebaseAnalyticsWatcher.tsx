@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
-import { getAnalyticsInstance } from "@/lib/client/firebase";
-import { logEvent, type Analytics } from "firebase/analytics";
+import { useEffect, useState } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { getAnalyticsInstance } from '@/lib/client/firebase';
+import { logEvent, type Analytics } from 'firebase/analytics';
 
 export function FirebaseAnalyticsWatcher() {
   const pathname = usePathname();
@@ -29,9 +29,9 @@ export function FirebaseAnalyticsWatcher() {
       return;
     }
 
-    const url = pathname + (searchParams?.toString() ? `?${searchParams}` : "");
+    const url = pathname + (searchParams?.toString() ? `?${searchParams}` : '');
 
-    logEvent(analytics, "page_view", {
+    logEvent(analytics, 'page_view', {
       page_location: url,
     });
   }, [pathname, searchParams, analytics]); // Re-run when these change

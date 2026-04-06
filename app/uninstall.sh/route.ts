@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const GITHUB_SCRIPT_URL = 'https://raw.githubusercontent.com/sauver-org/sauver/main/scripts/uninstall.sh';
+  const GITHUB_SCRIPT_URL =
+    'https://raw.githubusercontent.com/sauver-org/sauver/main/scripts/uninstall.sh';
 
   try {
     const response = await fetch(GITHUB_SCRIPT_URL, { cache: 'no-store' });

@@ -1,5 +1,5 @@
-import { Suspense } from "react";
-import { FirebaseAnalyticsWatcher } from "./FirebaseAnalyticsWatcher";
+import { Suspense } from 'react';
+import { FirebaseAnalyticsWatcher } from './FirebaseAnalyticsWatcher';
 
 export default function FirebaseAnalyticsInit() {
   return (

@@ -1,14 +1,16 @@
-import type { Metadata } from 'next'
-import FirebaseAnalyticsInit from "@/components/FirebaseAnalyticsInit";
-import './globals.css'
+import type { Metadata } from 'next';
+import FirebaseAnalyticsInit from '@/components/FirebaseAnalyticsInit';
+import './globals.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://sauver.org'),
   title: 'SAUVER | The anti AI-slop resistance',
-  description: 'Reclaim your attention with Sauver, the anti AI-slop resistance. We neutralize surveillance metadata and deploy active traps to make automated spammers pay.',
+  description:
+    'Reclaim your attention with Sauver, the anti AI-slop resistance. We neutralize surveillance metadata and deploy active traps to make automated spammers pay.',
   openGraph: {
     title: 'Sauver: The anti AI-slop resistance',
-    description: 'Reclaim your attention with Sauver, the anti AI-slop resistance. We neutralize surveillance metadata and deploy active traps to make automated spammers pay.',
+    description:
+      'Reclaim your attention with Sauver, the anti AI-slop resistance. We neutralize surveillance metadata and deploy active traps to make automated spammers pay.',
     url: 'https://sauver.org',
     siteName: 'Sauver',
     images: [
@@ -25,7 +27,8 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Sauver: The anti AI-slop resistance',
-    description: 'Reclaim your attention with Sauver, the anti AI-slop resistance. We neutralize surveillance metadata and deploy active traps to make automated spammers pay.',
+    description:
+      'Reclaim your attention with Sauver, the anti AI-slop resistance. We neutralize surveillance metadata and deploy active traps to make automated spammers pay.',
     creator: '@mszczodrak',
     images: ['https://sauver.org/og-image.jpg'],
   },
@@ -37,20 +40,19 @@ export const metadata: Metadata = {
     ],
     apple: '/apple-touch-icon.png',
   },
-}
+};
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <head>
         <link rel="manifest" href="/site.webmanifest" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono&display=swap" rel="stylesheet" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono&display=swap"
+          rel="stylesheet"
+        />
       </head>
       <body>
         <FirebaseAnalyticsInit />
@@ -58,5 +60,5 @@ export default function RootLayout({
         {children}
       </body>
     </html>
-  )
+  );
 }

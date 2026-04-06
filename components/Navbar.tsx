@@ -27,19 +27,47 @@ export default function Navbar({ activeSection }: { activeSection?: string }) {
         </Link>
 
         <div className={`nav-links ${mobileMenuOpen ? 'open' : ''}`}>
-          <Link href="/#who-it-is-for" className={activeSection === 'who-it-is-for' ? 'active' : ''} onClick={closeMenu}>Who it's for</Link>
-          <Link href="/#how-it-works" className={activeSection === 'how-it-works' ? 'active' : ''} onClick={closeMenu}>How it works</Link>
-          <Link href="/#installation" className={activeSection === 'installation' ? 'active' : ''} onClick={closeMenu}>Installation</Link>
-          <Link href="/docs" className={activeSection === 'docs' ? 'active' : ''} onClick={closeMenu}>Docs</Link>
-          <Link href="/#installation" className="btn btn-cta" onClick={closeMenu}>Install Now</Link>
+          <Link
+            href="/#who-it-is-for"
+            className={activeSection === 'who-it-is-for' ? 'active' : ''}
+            onClick={closeMenu}
+          >
+            Who it's for
+          </Link>
+          <Link
+            href="/#how-it-works"
+            className={activeSection === 'how-it-works' ? 'active' : ''}
+            onClick={closeMenu}
+          >
+            How it works
+          </Link>
+          <Link
+            href="/#installation"
+            className={activeSection === 'installation' ? 'active' : ''}
+            onClick={closeMenu}
+          >
+            Installation
+          </Link>
+          <Link
+            href="/docs"
+            className={activeSection === 'docs' ? 'active' : ''}
+            onClick={closeMenu}
+          >
+            Docs
+          </Link>
+          <Link href="/#installation" className="btn btn-cta" onClick={closeMenu}>
+            Install Now
+          </Link>
         </div>
 
         <button
           className={`hamburger ${mobileMenuOpen ? 'open' : ''}`}
           aria-label="Toggle menu"
-          onClick={() => setMobileMenuOpen(o => !o)}
+          onClick={() => setMobileMenuOpen((o) => !o)}
         >
-          <span /><span /><span />
+          <span />
+          <span />
+          <span />
         </button>
       </div>
     </nav>
