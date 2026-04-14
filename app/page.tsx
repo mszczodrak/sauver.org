@@ -431,7 +431,7 @@ export default function Home() {
         email,
         subscribedAt: serverTimestamp(),
         source: 'homepage_install_section',
-        honeyPot: '',
+        honeyPot: honeyPot,
       });
       setSubscribeStatus('success');
       setEmail('');
