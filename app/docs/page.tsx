@@ -23,6 +23,7 @@ const COMMANDS = [
     cmd: '/sauver',
     desc: 'Full triage — scans inbox, strips trackers, classifies intent, and drafts or sends counter-measures.',
   },
+  { cmd: '/sauver-report', desc: 'Generates a weekly digest of trackers blocked, traps deployed, and time saved' },
   { cmd: '/tracker-shield', desc: 'Strip tracking pixels and spy-links from a specific email.' },
   {
     cmd: '/slop-detector',
