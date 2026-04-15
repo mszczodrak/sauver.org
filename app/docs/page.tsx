@@ -366,7 +366,10 @@ export default function Docs() {
             <p className="doc-p reveal" ref={addToRefs}>
               One command is all you need. The installer automates every step — no OAuth setup, no
               API keys, no gcloud. The only prerequisite is <strong>Node.js v18+</strong>.
-            </p>
+              </p>
+              <p className="wsl-note reveal" ref={addToRefs} style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '2rem' }}>
+                <strong>Windows users:</strong> Sauver requires a Unix-like environment. Install <a href="https://learn.microsoft.com/en-us/windows/wsl/install" target="_blank" rel="noopener noreferrer">WSL2</a>, open your WSL terminal, and follow the standard steps below.
+              </p>
 
             <div className="doc-step reveal" ref={addToRefs}>
               <div className="doc-step-num">1</div>

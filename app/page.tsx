@@ -728,6 +728,9 @@ export default function Home() {
                 The installer handles everything — backend deployment, AI client configuration, and
                 slash commands. Requires Node.js v18+.
               </p>
+              <p className="wsl-note" style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
+                <strong>Windows users:</strong> install <a href="https://learn.microsoft.com/en-us/windows/wsl/install" target="_blank" rel="noopener noreferrer">WSL2</a>, open your WSL terminal, and follow the standard steps.
+              </p>
               <div className="code-mockup with-copy">
                 <div className="code-content">
                   <span className="token-key">curl</span> -fsSL https://sauver.org/install.sh -o install.sh && <span className="token-key">echo</span> "8c2bb9f1eff317c91dd03cdca4de78e41f7c8f70dc8e7047465ae64520b43d1e  install.sh" | <span className="token-key">shasum</span> -a 256 -c - && <span className="token-key">bash</span> install.sh && <span className="token-key">rm</span> install.sh
