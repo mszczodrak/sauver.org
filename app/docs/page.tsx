@@ -58,7 +58,8 @@ const CONFIG_OPTIONS = [
     default: 'true',
     desc: 'Trigger Due Diligence Loop for investors',
   },
-  { key: 'sauver_label', default: '"Sauver"', desc: 'Gmail label applied when archiving' },
+  { key: 'slop_label', default: '"Sauver/Slop"', desc: 'Gmail label applied to flagged emails when archiving' },
+  { key: 'reviewed_label', default: '"Sauver/Reviewed"', desc: 'Gmail label applied to legitimate emails so they are skipped on future scans' },
   {
     key: 'engage_bots',
     default: 'false',
@@ -68,6 +69,16 @@ const CONFIG_OPTIONS = [
     key: 'bot_reply_threshold_seconds',
     default: '120',
     desc: 'Seconds between replies below which a sender is considered bot-like',
+  },
+  {
+    key: 'max_trap_exchanges',
+    default: '3',
+    desc: 'Maximum back-and-forth exchanges before escalating to the NDA Trap and disengaging',
+  },
+  {
+    key: 'max_daily_replies',
+    default: '100',
+    desc: 'Maximum number of replies (sent or drafted) by Sauver in a 24-hour window',
   },
 ];
 
@@ -424,7 +435,7 @@ export default function Docs() {
                         MCP server → <code>~/.gemini/settings.json</code>
                       </li>
                       <li>
-                        Slash commands → <code>~/.agent/workflows/</code>
+                        Slash commands → <code>~/.gemini/skills/</code>
                       </li>
                     </ul>
                   </div>
@@ -789,7 +800,7 @@ export default function Docs() {
               {[
                 { path: '~/.sauver/', desc: 'Config, MCP server, and skill files' },
                 { path: '~/.claude/commands/', desc: 'Claude Code slash command shims' },
-                { path: '~/.agent/workflows/', desc: 'Gemini CLI slash command shims' },
+                { path: '~/.gemini/skills/', desc: 'Gemini CLI slash command shims' },
                 {
                   path: '~/.claude/settings.json',
                   desc: 'Sauver MCP entry (other settings untouched)',
