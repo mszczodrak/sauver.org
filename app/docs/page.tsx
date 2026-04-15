@@ -58,6 +58,7 @@ const CONFIG_OPTIONS = [
     default: 'true',
     desc: 'Trigger Due Diligence Loop for investors',
   },
+  { key: 'whitelist', default: '[]', desc: 'List of email addresses or domains that should never be trapped, archived, or classified as slop' },
   { key: 'slop_label', default: '"Sauver/Slop"', desc: 'Gmail label applied to flagged emails when archiving' },
   { key: 'reviewed_label', default: '"Sauver/Reviewed"', desc: 'Gmail label applied to legitimate emails so they are skipped on future scans' },
   {
