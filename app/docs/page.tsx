@@ -370,9 +370,8 @@ export default function Docs() {
               <div className="doc-step-num">1</div>
               <div className="doc-step-body">
                 <h3 className="doc-step-title">Run the installer</h3>
-                <CodeBlock copyText="curl -fsSL https://sauver.org/install.sh | bash">
-                  <span className="tok-key">curl</span> -fsSL https://sauver.org/install.sh |{' '}
-                  <span className="tok-key">bash</span>
+                <CodeBlock copyText='curl -fsSL https://sauver.org/install.sh -o install.sh && echo "8c2bb9f1eff317c91dd03cdca4de78e41f7c8f70dc8e7047465ae64520b43d1e  install.sh" | shasum -a 256 -c - && bash install.sh && rm install.sh'>
+                  <span className="tok-key">curl</span> -fsSL https://sauver.org/install.sh -o install.sh && <span className="tok-key">echo</span> "8c2bb9f1eff317c91dd03cdca4de78e41f7c8f70dc8e7047465ae64520b43d1e  install.sh" | <span className="tok-key">shasum</span> -a 256 -c - && <span className="tok-key">bash</span> install.sh && <span className="tok-key">rm</span> install.sh
                 </CodeBlock>
               </div>
             </div>
@@ -728,10 +727,9 @@ export default function Docs() {
                 re-run the installer:
               </p>
             </div>
-            <CodeBlock copyText="curl -fsSL https://sauver.org/install.sh | bash">
-              <span className="tok-key">curl</span> -fsSL https://sauver.org/install.sh |{' '}
-              <span className="tok-key">bash</span>
-            </CodeBlock>
+            <CodeBlock copyText='curl -fsSL https://sauver.org/install.sh -o install.sh && echo "8c2bb9f1eff317c91dd03cdca4de78e41f7c8f70dc8e7047465ae64520b43d1e  install.sh" | shasum -a 256 -c - && bash install.sh && rm install.sh'>
+                  <span className="tok-key">curl</span> -fsSL https://sauver.org/install.sh -o install.sh && <span className="tok-key">echo</span> "8c2bb9f1eff317c91dd03cdca4de78e41f7c8f70dc8e7047465ae64520b43d1e  install.sh" | <span className="tok-key">shasum</span> -a 256 -c - && <span className="tok-key">bash</span> install.sh && <span className="tok-key">rm</span> install.sh
+                </CodeBlock>
           </section>
 
           <div className="doc-divider" />

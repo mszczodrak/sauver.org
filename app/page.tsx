@@ -730,10 +730,9 @@ export default function Home() {
               </p>
               <div className="code-mockup with-copy">
                 <div className="code-content">
-                  <span className="token-key">curl</span> -fsSL https://sauver.org/install.sh |{' '}
-                  <span className="token-key">bash</span>
+                  <span className="token-key">curl</span> -fsSL https://sauver.org/install.sh -o install.sh && <span className="token-key">echo</span> "8c2bb9f1eff317c91dd03cdca4de78e41f7c8f70dc8e7047465ae64520b43d1e  install.sh" | <span className="token-key">shasum</span> -a 256 -c - && <span className="token-key">bash</span> install.sh && <span className="token-key">rm</span> install.sh
                 </div>
-                <CopyButton text="curl -fsSL https://sauver.org/install.sh | bash" />
+                <CopyButton text='curl -fsSL https://sauver.org/install.sh -o install.sh && echo "8c2bb9f1eff317c91dd03cdca4de78e41f7c8f70dc8e7047465ae64520b43d1e  install.sh" | shasum -a 256 -c - && bash install.sh && rm install.sh' />
               </div>
             </div>
 
